@@ -53,7 +53,7 @@ window.addEventListener('load', function(ev) {
     }
     
     /** 
-     * Marks a pixel in data with 
+     * Marks a pixel in data with fillC.
      * 
      * @param {Uint8ClampedArray} arr The array to mark.
      * @param {number} i The linear coordinate of the pixel to mark
@@ -76,7 +76,7 @@ window.addEventListener('load', function(ev) {
 	};
     }
 
-    /** 
+   /** 
     * Get x y coordinates of a pixel on the canvas given by linear coordiates.
     * 
     * @param {number} The linear coordinate.
@@ -89,7 +89,7 @@ window.addEventListener('load', function(ev) {
 	};
     }
     
-    /** 
+   /** 
     * Get linear coordinate of a pixel on the canvas.
     * 
     * @param {number} x x coordinate.
@@ -99,7 +99,8 @@ window.addEventListener('load', function(ev) {
     function linear(x, y) {
 	return(canvas.width * y + x);
     }
-    
+
+// drawing functions
    /** 
     * Calculate the distance between two points.
     * 
@@ -175,9 +176,12 @@ window.addEventListener('load', function(ev) {
 		distToPoint(p0, p1) < radius ||
 		distToPoint(p0, p2) < radius);
     }
-    
+
+   /** 
+    * Draws a circle on the canvas at the current mouse position..
+    */    
     function drawCircle() {
-	var pos = mousePos(ev);
+	var pos = mousePos();
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
 	    if (distToPoint(icart, pos) < radius) {
@@ -187,6 +191,12 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
 
+   /** 
+    * Draws a stroke with rounded ends on the canvas between two points.
+    * 
+    * @param {Point} p1 An endpoint of the stroke.
+    * @param {Point} p2 An endpoint of the stroke.
+    */
     function drawLine(p1, p2) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
@@ -196,7 +206,10 @@ window.addEventListener('load', function(ev) {
 	}
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
-    
+
+   /** 
+    * Draws on the canvas.
+    */
     function draw() {
 	if (mouseDown) {
 	    var pos = mousePos(ev);
@@ -210,24 +223,36 @@ window.addEventListener('load', function(ev) {
 	}
     }
 
-    function disableConway() {
-	conwayOn = false;
-	conwayB.textContent = "conway";
-	
-    }
-
-    function enableConway() {
-	conwayOn = true;
-	conwayB.textContent = "stop";	
-    }
-    
-    function clear(ev) {
-	disableConway(ev);
+   /** 
+    * Clears the canvas.
+    */
+    function clear() {
+	disableConway();
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	data = (ctx.getImageData(0, 0,canvas.width, canvas.height)).data;
 	prevPoint = null;
     }
 
+// cellular automata functions
+   /** 
+    * Turns off cellular automate stepping.
+    */
+    function disableConway() {
+	conwayOn = false;
+	conwayB.textContent = "conway";
+    }
+    
+   /** 
+    * Turns on cellular automata stepping.
+    */
+    function enableConway() {
+	conwayOn = true;
+	conwayB.textContent = "stop";	
+    }
+    
+   /** 
+    * Advances the cellular automata on the canvas by one step.
+    */
     function step() {
 	var newData = new Uint8ClampedArray(data);
 	var alive;
@@ -254,7 +279,8 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(newData, canvas.width), 0, 0);
 	data = newData;
     }
-    
+
+// callbacks
     canvas.addEventListener('mousemove', draw, false);
     
     canvas.addEventListener('mousedown', function() {
@@ -277,7 +303,7 @@ window.addEventListener('load', function(ev) {
 	if (conwayOn) { disableConway(); }
 	else { enableConway(); }
     } , false);
-
+    
     brushSize.addEventListener('input', function() {
 	radius = brushSize.value;
     } , false);
@@ -288,6 +314,7 @@ window.addEventListener('load', function(ev) {
 	};
     } , false);
 
+    // toggle textures
     textureB1.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
