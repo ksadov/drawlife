@@ -89,7 +89,6 @@ window.addEventListener('load', function(ev) {
      * @return {Point} The 2d coordinates of the touch. 
      */
     function touchPos(ev) {
-	ev.preventDefault();
 	var rect = canvas.getBoundingClientRect();
 	return{
 	    x: Math.round(
@@ -320,21 +319,24 @@ window.addEventListener('load', function(ev) {
 	prevPoint = null;
     }, false );
 
-    //mobile event listeners
+    //touchscreen event listeners
     canvas.addEventListener("touchstart",  function(ev) {
+	//ev.preventDefault();
 	mouseDown = true;
 	draw(touchPos(ev));
 	disableConway();
-    }, false );
+    },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
+	//ev.preventDefault();
 	mouseDown = false;
 	prevPoint = null;
-    }, false );
+    }, { passive: false } );
     
     canvas.addEventListener("touchmove",  function(ev) {
+	ev.preventDefault();
 	draw(touchPos(ev));
-    }, false);
+    }, { passive: false });
 
     //buttons
     clearB.addEventListener('click', clear, false);
