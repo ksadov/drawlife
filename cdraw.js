@@ -20,10 +20,7 @@ window.addEventListener('load', function(ev) {
     ctx.fillStyle = 'white'; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    var data = (ctx.getImageData(0,
-				     0,
-				     canvas.width,
-				 canvas.height)).data;
+    var data = (ctx.getImageData(0, 0, canvas.width, canvas.height)).data;
     
     var mouseDown = false;
     var zoom = 4;
@@ -253,10 +250,6 @@ window.addEventListener('load', function(ev) {
 	    else if (isDead && count == 3) {
 		mark(newData, n, 0);
 	    }
-	    
-/* //Pretty symmetries
-	    else {mark(newData, n, 0)};
-*/
 	}
 	ctx.putImageData(new ImageData(newData, canvas.width), 0, 0);
 	data = newData;
@@ -283,6 +276,10 @@ window.addEventListener('load', function(ev) {
     conwayB.addEventListener('click', function() {
 	if (conwayOn) { disableConway(); }
 	else { enableConway(); }
+    } , false);
+
+    brushSize.addEventListener('input', function() {
+	radius = brushSize.value;
     } , false);
     
     textureB0.addEventListener('click', function() {
@@ -349,10 +346,6 @@ window.addEventListener('load', function(ev) {
 	    if  ((c.x - c.y) % 4 == 0 || (c.x - c.y + 1) % 4 == 0)
 	    {markPix(i);}
 	};
-    } , false);
-    
-    brushSize.addEventListener('input', function() {
-	radius = brushSize.value;
     } , false);
     
 } ,false);
