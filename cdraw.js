@@ -34,6 +34,12 @@ window.addEventListener('load', function(ev) {
     //run conway loop in bg
     setInterval (function() { if (conwayOn) {step(ev);} }, 250);
 
+    /**
+     * @typedef {Object} Point
+     * @property {number} x - x coordinate
+     * @property {number} y - y coordinate
+     */
+    
     /** 
      * Marks a pixel in a specificed Uint8ClampedArray with a specified fill.
      * 
@@ -61,7 +67,7 @@ window.addEventListener('load', function(ev) {
     /** 
      * Get the coordinates of the mouse on the canvas.
      * 
-     * @return {object} The x y coordinates of the mouse. 
+     * @return {Point} The coordinates of the mouse. 
      */
     function mousePos(ev) {
 	var rect = canvas.getBoundingClientRect();
@@ -74,7 +80,7 @@ window.addEventListener('load', function(ev) {
     /** 
     * Get x y coordinates of a pixel on the canvas given by linear coordiates.
     * 
-    * @return {object} The x y coordinates of the pixels. 
+    * @return {Point} The x y coordinates of the pixels. 
     */
     function cartesian(n) {
 	return {
