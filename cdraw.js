@@ -1,6 +1,13 @@
+var zoom =
+    (canvas.getBoundingClientRect().height/canvas.height)
+
+window.addEventListener('resize', function() {
+	zoom = (canvas.getBoundingClientRect().height/canvas.height);
+    } , false);
+					 
 window.addEventListener('load', function(ev) {
     var canvas = document.getElementById('canvas');
-    
+    var body =  document.getElementById('body');
     var clearB = document.getElementById('clearButton');   
     var conwayB = document.getElementById('conwayButton');
     var brushSize = document.getElementById('brushSize');
@@ -23,12 +30,12 @@ window.addEventListener('load', function(ev) {
     var data = (ctx.getImageData(0, 0, canvas.width, canvas.height)).data;
     
     var mouseDown = false;
-    var zoom = 4;
     var conwayOn = false;
     var radius = brushSize.value;
     var prevPoint = null;
     var fillC = 0;
     var texture = function(i) { markPix(i); };
+
     
     //run conway loop in bg
     setInterval (function() { if (conwayOn) {step(ev);} }, 250);
@@ -75,7 +82,23 @@ window.addEventListener('load', function(ev) {
 	    y: Math.round((event.clientY - rect.top)/zoom)
 	};
     }
-
+    
+    /** 
+     * Get the coordinates of the touch on the canvas.
+     * 
+     * @return {Point} The 2d coordinates of the touch. 
+     */
+    function touchPos(ev) {
+	ev.preventDefault();
+	var rect = canvas.getBoundingClientRect();
+	return{
+	    x: Math.round(
+		(ev.targetTouches[0].pageX - rect.left)/zoom),
+	    y: Math.round(
+		(ev.targetTouches[0].pageY - rect.top)/zoom)
+	};
+    }
+    
    /** 
     * Get x y coordinates of a pixel on the canvas given by linear coordiates.
     * 
@@ -178,10 +201,9 @@ window.addEventListener('load', function(ev) {
     }
 
    /** 
-    * Draws a circle on the canvas at the current mouse position..
+    * Draws a circle on the canvas at a given position..
     */    
-    function drawCircle() {
-	var pos = mousePos();
+    function drawCircle(pos) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
 	    if (distToPoint(icart, pos) < radius) {
@@ -208,13 +230,12 @@ window.addEventListener('load', function(ev) {
     }
 
    /** 
-    * Draws on the canvas.
+    * Draws on the canvas at a given position.
     */
-    function draw() {
+    function draw(pos) {
 	if (mouseDown) {
-	    var pos = mousePos(ev);
 	    if (prevPoint == null) {
-		drawCircle();
+		drawCircle(pos);
 	    }
 	    else {
 		drawLine(prevPoint, pos);
@@ -281,15 +302,17 @@ window.addEventListener('load', function(ev) {
     }
 
 // callbacks
-    canvas.addEventListener('mousemove', draw, false);
+    canvas.addEventListener('mousemove',  function(ev) {
+	draw(mousePos(ev));
+    }, false);
     
     canvas.addEventListener('mousedown', function() {
 	mouseDown = true;
 	disableConway();
     }, false );
     
-    canvas.addEventListener('click', function() {
-	drawCircle();
+    canvas.addEventListener('click', function(ev) {
+	drawCircle(mousePos(ev));
     }, false );
     
     canvas.addEventListener('mouseup', function() {
@@ -297,6 +320,23 @@ window.addEventListener('load', function(ev) {
 	prevPoint = null;
     }, false );
 
+    //mobile event listeners
+    canvas.addEventListener("touchstart",  function(ev) {
+	mouseDown = true;
+	draw(touchPos(ev));
+	disableConway();
+    }, false );
+    
+    canvas.addEventListener("touchend",  function(ev) {
+	mouseDown = false;
+	prevPoint = null;
+    }, false );
+    
+    canvas.addEventListener("touchmove",  function(ev) {
+	draw(touchPos(ev));
+    }, false);
+
+    //buttons
     clearB.addEventListener('click', clear, false);
 
     conwayB.addEventListener('click', function() {
@@ -374,5 +414,5 @@ window.addEventListener('load', function(ev) {
 	    {markPix(i);}
 	};
     } , false);
-    
+
 } ,false);

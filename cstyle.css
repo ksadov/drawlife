@@ -1,12 +1,28 @@
+body {
+}
+
 canvas {  
-  width: 800px;
-  height: 600px;
+  display: block;
+  width: 95vw;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   border: 1px solid black;
 }
+
+@media screen and (orientation: landscape) {
+    canvas {
+	height: 95vh;
+	width: auto;
+    }
+    
+@media screen and (min-device-width: 1024px) {
+    canvas {
+	width: 800px;
+	height: 600px;		   
+}
+
 .texture {
   width: 32px;
   height: 32px;
