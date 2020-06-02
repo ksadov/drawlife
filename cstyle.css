@@ -4,7 +4,7 @@ body {
 canvas {  
   display: block;
   width: 95vw;
-  touch-action: none:
+  touch-action: pinch-zoom;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
   image-rendering: pixelated;
