@@ -179,7 +179,7 @@ window.addEventListener('load', function(ev) {
 		distToPoint(p0, p2) < radius);
     }
     
-    function drawCircle(ev) {
+    function drawCircle() {
 	var pos = mousePos(ev);
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
@@ -190,7 +190,7 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
 
-    function drawLine(ev, p1, p2) {
+    function drawLine(p1, p2) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
 	    if (inStroke(icart, p1, p2)) {
@@ -200,26 +200,26 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
     
-    function draw(ev) {
+    function draw() {
 	if (mouseDown) {
 	    var pos = mousePos(ev);
 	    if (prevPoint == null) {
-		drawCircle(ev);
+		drawCircle();
 	    }
 	    else {
-		drawLine(ev, prevPoint, pos);
+		drawLine(prevPoint, pos);
 	    }
 	    prevPoint = {x: pos.x, y: pos.y};
 	}
     }
 
-    function disableConway(ev) {
+    function disableConway() {
 	conwayOn = false;
 	conwayB.textContent = "conway";
 	
     }
 
-    function enableConway(ev) {
+    function enableConway() {
 	conwayOn = true;
 	conwayB.textContent = "stop";	
     }
@@ -231,7 +231,7 @@ window.addEventListener('load', function(ev) {
 	prevPoint = null;
     }
 
-    function step(ev) {
+    function step() {
 	var newData = new Uint8ClampedArray(data);
 	var alive;
 	for (n = 0; n < canvas.width*canvas.height; n++) {
@@ -253,6 +253,7 @@ window.addEventListener('load', function(ev) {
 	    else if (isDead && count == 3) {
 		mark(newData, n, 0);
 	    }
+	    
 /* //Pretty symmetries
 	    else {mark(newData, n, 0)};
 */
@@ -263,68 +264,68 @@ window.addEventListener('load', function(ev) {
     
     canvas.addEventListener('mousemove', draw, false);
     
-    canvas.addEventListener('mousedown', function(ev) {
+    canvas.addEventListener('mousedown', function() {
 	mouseDown = true;
-	disableConway(ev);
+	disableConway();
     }, false );
     
-    canvas.addEventListener('click', function(ev) {
-	drawCircle(ev);
+    canvas.addEventListener('click', function() {
+	drawCircle();
     }, false );
     
-    canvas.addEventListener('mouseup', function(ev) {
+    canvas.addEventListener('mouseup', function() {
 	mouseDown = false;
 	prevPoint = null;
     }, false );
 
     clearB.addEventListener('click', clear, false);
 
-    conwayB.addEventListener('click', function(ev) {
-	if (conwayOn) { disableConway(ev); }
-	else { enableConway(ev); }
+    conwayB.addEventListener('click', function() {
+	if (conwayOn) { disableConway(); }
+	else { enableConway(); }
     } , false);
     
-    textureB0.addEventListener('click', function(ev) {
+    textureB0.addEventListener('click', function() {
 	texture = function(i) {
 	    markPix(i);
 	};
     } , false);
 
-    textureB1.addEventListener('click', function(ev) {
+    textureB1.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if ((c.x + c.y)%2 == 0) {markPix(i);}
 	};
     } , false);
 
-    textureB2.addEventListener('click', function(ev) {
+    textureB2.addEventListener('click', function() {
 	texture = function(i) {
 	    if (i%2 == 0) {markPix(i);}
 	};
     } , false);
 
-    textureB3.addEventListener('click', function(ev) {
+    textureB3.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if ((c.x - c.y)%4 == 0) {markPix(i);}
 	};
     } , false);
 
-    textureB4.addEventListener('click', function(ev) {
+    textureB4.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if ((c.x - c.y)%4 == 0 && (c.x + c.y)%4 == 0) {markPix(i);}
 	};
     } , false);
 
-     textureB5.addEventListener('click', function(ev) {
+     textureB5.addEventListener('click', function() {
 	 texture = function(i) {
 	    let c = cartesian(i);
 	    if  ((c.x - c.y)%4 == 0 || (c.x + c.y)%4 == 0) {markPix(i);}
 	};
      } , false);
 
-     textureB6.addEventListener('click', function(ev) {
+     textureB6.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if  (c.y%2 == 0) {
@@ -335,14 +336,14 @@ window.addEventListener('load', function(ev) {
 	};
      } , false);
 
-     textureB7.addEventListener('click', function(ev) {
+     textureB7.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if  (c.y % 2 == 0) {markPix(i);}
 	};
      } , false);
     
-    textureB8.addEventListener('click', function(ev) {
+    textureB8.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);
 	    if  ((c.x - c.y) % 4 == 0 || (c.x - c.y + 1) % 4 == 0)
@@ -350,7 +351,7 @@ window.addEventListener('load', function(ev) {
 	};
     } , false);
     
-    brushSize.addEventListener('input', function(ev) {
+    brushSize.addEventListener('input', function() {
 	radius = brushSize.value;
     } , false);
     
