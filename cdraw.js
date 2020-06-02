@@ -38,8 +38,8 @@ window.addEventListener('load', function(ev) {
      * Marks a pixel in a specificed Uint8ClampedArray with a specified fill.
      * 
      * @param {Uint8ClampedArray} arr The array to mark.
-     * @param {int} i The pixel to mark
-     * @param {int} fill 0 if black, 255 if white
+     * @param {number} i The pixel to mark
+     * @param {number} fill 0 if black, 255 if white
      */
     function mark(arr, i, fill) {
 	arr[i*4] = fill;
@@ -51,8 +51,8 @@ window.addEventListener('load', function(ev) {
      * Marks a pixel in data with 
      * 
      * @param {Uint8ClampedArray} arr The array to mark.
-     * @param {int} i The pixel to mark
-     * @param {int} fill 0 if black, 255 if white
+     * @param {number} i The pixel to mark
+     * @param {number} fill 0 if black, 255 if white
      */
     function markPix(i) {
 	mark(data, i, fillC);
@@ -86,11 +86,11 @@ window.addEventListener('load', function(ev) {
    /** 
     * Calculate the distance between two points.
     * 
-    * @param {int} x0 x-coordinate of the first point.
-    * @param {int} y0 y-coordinate of the first point.
-    * @param {int} x1 x-coordinate of the second point.
-    * @param {int} y1 y-coordinate of the second point.
-    * @return {int} Distance rounded to the nearest int.
+    * @param {number} x0 x-coordinate of the first point.
+    * @param {number} y0 y-coordinate of the first point.
+    * @param {number} x1 x-coordinate of the second point.
+    * @param {number} y1 y-coordinate of the second point.
+    * @return {number} Distance rounded to the nearest int.
     */
     function distToPoint(x0, y0, x1, y1) {
 	return Math.round(Math.sqrt( (x0 - x1) ** 2 + (y0 - y1) ** 2 ));
@@ -99,13 +99,13 @@ window.addEventListener('load', function(ev) {
    /** 
     * Calculate the distance between a point and a line given by two points.
     * 
-    * @param {int} x0 x-coordinate of the point.
-    * @param {int} y0 y-coordinate of the point.
-    * @param {int} x1 x-coordinate of a point on the line.
-    * @param {int} y1 y-coordinate of a point on the line.
-    * @param {int} x2 x-coordinate of a point on the line.
-    * @param {int} y2 y-coordinate of a point on the line.
-    * @return {int} Distance rounded to the nearest int.
+    * @param {number} x0 x-coordinate of the point.
+    * @param {number} y0 y-coordinate of the point.
+    * @param {number} x1 x-coordinate of a point on the line.
+    * @param {number} y1 y-coordinate of a point on the line.
+    * @param {number} x2 x-coordinate of a point on the line.
+    * @param {number} y2 y-coordinate of a point on the line.
+    * @return {number} Distance rounded to the nearest int.
     */
     function distToLine(x0, y0, x1, y1, x2, y2) {
 	var numerator = Math.abs((y2 - y1)*x0 -
@@ -123,11 +123,11 @@ window.addEventListener('load', function(ev) {
    /** 
     * Return the slope of a line given by two points.
     * 
-    * @param {int} x1 x-coordinate of a point on the line.
-    * @param {int} y1 y-coordinate of a point on the line.
-    * @param {int} x2 x-coordinate of a point on the line.
-    * @param {int} y2 y-coordinate of a point on the line.
-    * @return {int} Slope.
+    * @param {number} x1 x-coordinate of a point on the line.
+    * @param {number} y1 y-coordinate of a point on the line.
+    * @param {number} x2 x-coordinate of a point on the line.
+    * @param {number} y2 y-coordinate of a point on the line.
+    * @return {number} Slope.
     */    
     function lineCoefficients(x1, y1, x2, y2) {
 	return {
@@ -138,13 +138,13 @@ window.addEventListener('load', function(ev) {
    /** 
     * Returns true if a point falls within a stroke between two points.
     * 
-    * @param {int} x0 x-coordinate of the point.
-    * @param {int} y0 y-coordinate of the point.
-    * @param {int} x1 x-coordinate of a point on the line.
-    * @param {int} y1 y-coordinate of a point on the line.
-    * @param {int} x2 x-coordinate of a point on the line.
-    * @param {int} y2 y-coordinate of a point on the line.
-    * @return {int} Distance rounded to the nearest int.
+    * @param {number} x0 x-coordinate of the point.
+    * @param {number} y0 y-coordinate of the point.
+    * @param {number} x1 x-coordinate of a point on the line.
+    * @param {number} y1 y-coordinate of a point on the line.
+    * @param {number} x2 x-coordinate of a point on the line.
+    * @param {number} y2 y-coordinate of a point on the line.
+    * @return {number} Distance rounded to the nearest int.
     */
     function inStroke(x0, y0, x1, y1, x2, y2) {
 	var inRectangle = false;
