@@ -321,14 +321,14 @@ window.addEventListener('load', function(ev) {
 
     //touchscreen event listeners
     canvas.addEventListener("touchstart",  function(ev) {
-	//ev.preventDefault();
+	ev.preventDefault();
 	mouseDown = true;
 	draw(touchPos(ev));
 	disableConway();
     },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
-	//ev.preventDefault();
+	ev.preventDefault();
 	mouseDown = false;
 	prevPoint = null;
     }, { passive: false } );
