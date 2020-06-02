@@ -1,8 +1,9 @@
 window.addEventListener('load', function(ev) {
     var canvas = document.getElementById('canvas');
     
-    var clearB = document.getElementById('clearButton');
+    var clearB = document.getElementById('clearButton');   
     var conwayB = document.getElementById('conwayButton');
+    var brushSize = document.getElementById('brushSize');
     var textureB0 = document.getElementById('texture0');
     var textureB1 = document.getElementById('texture1');
     var textureB2 = document.getElementById('texture2');
@@ -13,17 +14,18 @@ window.addEventListener('load', function(ev) {
     var textureB7 = document.getElementById('texture7');
     var textureB8 = document.getElementById('texture8');
     
-    var brushSize = document.getElementById('brushSize');
     var ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     ctx.scale(zoom, zoom);
     ctx.fillStyle = 'white'; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    var mouseDown = false;
+
     var data = (ctx.getImageData(0,
 				     0,
 				     canvas.width,
 				 canvas.height)).data;
+    
+    var mouseDown = false;
     var zoom = 4;
     var conwayOn = false;
     var radius = brushSize.value;
@@ -44,7 +46,7 @@ window.addEventListener('load', function(ev) {
      * Marks a pixel in a specificed Uint8ClampedArray with a specified fill.
      * 
      * @param {Uint8ClampedArray} arr The array to mark.
-     * @param {number} i The pixel to mark
+     * @param {number} i The linear coordinate of the pixel to mark
      * @param {number} fill 0 if black, 255 if white
      */
     function mark(arr, i, fill) {
@@ -57,7 +59,7 @@ window.addEventListener('load', function(ev) {
      * Marks a pixel in data with 
      * 
      * @param {Uint8ClampedArray} arr The array to mark.
-     * @param {number} i The pixel to mark
+     * @param {number} i The linear coordinate of the pixel to mark
      * @param {number} fill 0 if black, 255 if white
      */
     function markPix(i) {
@@ -67,7 +69,7 @@ window.addEventListener('load', function(ev) {
     /** 
      * Get the coordinates of the mouse on the canvas.
      * 
-     * @return {Point} The coordinates of the mouse. 
+     * @return {Point} The 2d coordinates of the mouse. 
      */
     function mousePos(ev) {
 	var rect = canvas.getBoundingClientRect();
@@ -80,7 +82,8 @@ window.addEventListener('load', function(ev) {
     /** 
     * Get x y coordinates of a pixel on the canvas given by linear coordiates.
     * 
-    * @return {Point} The x y coordinates of the pixels. 
+    * @param {number} The linear coordinate.
+    * @return {Point} The 2d coordinates of the pixels. 
     */
     function cartesian(n) {
 	return {
@@ -88,38 +91,44 @@ window.addEventListener('load', function(ev) {
 	    y: Math.floor(n/canvas.width)
 	};
     }
-
+    
+    /** 
+    * Get linear coordinate of a pixel on the canvas.
+    * 
+    * @param {number} x x coordinate.
+    * @param {number} y y coordinate.
+    * @return {number} Linear coordinate.
+    */
+    function linear(x, y) {
+	return(canvas.width * y + x);
+    }
+    
    /** 
     * Calculate the distance between two points.
     * 
-    * @param {number} x0 x-coordinate of the first point.
-    * @param {number} y0 y-coordinate of the first point.
-    * @param {number} x1 x-coordinate of the second point.
-    * @param {number} y1 y-coordinate of the second point.
+    * @param {Point} The first point.
+    * @param {Point} The second point.
     * @return {number} Distance rounded to the nearest int.
     */
-    function distToPoint(x0, y0, x1, y1) {
-	return Math.round(Math.sqrt( (x0 - x1) ** 2 + (y0 - y1) ** 2 ));
+    function distToPoint(p0, p1) {
+	return Math.round(Math.sqrt( (p0.x - p1.x) ** 2 + (p0.y - p1.y) ** 2 ));
     }
 
    /** 
     * Calculate the distance between a point and a line given by two points.
     * 
-    * @param {number} x0 x-coordinate of the point.
-    * @param {number} y0 y-coordinate of the point.
-    * @param {number} x1 x-coordinate of a point on the line.
-    * @param {number} y1 y-coordinate of a point on the line.
-    * @param {number} x2 x-coordinate of a point on the line.
-    * @param {number} y2 y-coordinate of a point on the line.
+    * @param {Point} p0 The point.
+    * @param {Point} p1 The first point on the line.
+    * @param {Point} p2 The second point on the line.
     * @return {number} Distance rounded to the nearest int.
     */
-    function distToLine(x0, y0, x1, y1, x2, y2) {
-	var numerator = Math.abs((y2 - y1)*x0 -
-                                      (x2 - x1)*y0 +
-                                      x2*y1 - y2*x1);
-	var denominator = Math.sqrt(((y2 - y1) ** 2 + (x2 - x1) ** 2));
+    function distToLine(p0, p1, p2) {
+	var numerator = Math.abs((p2.y - p1.y)*p0.x -
+                                      (p2.x - p1.x)*p0.y +
+                                      p2.x*p1.y - p2.y*p1.x);
+	var denominator = Math.sqrt(((p2.y - p1.y) ** 2 + (p2.x - p1.x) ** 2));
 	if (denominator == 0) {
-	    return distToPoint(x0, y0, x1, y1);
+	    return distToPoint(p0, p1);
 	}
 	else {
 	    return Math.round((numerator / denominator));
@@ -129,67 +138,62 @@ window.addEventListener('load', function(ev) {
    /** 
     * Return the slope of a line given by two points.
     * 
-    * @param {number} x1 x-coordinate of a point on the line.
-    * @param {number} y1 y-coordinate of a point on the line.
-    * @param {number} x2 x-coordinate of a point on the line.
-    * @param {number} y2 y-coordinate of a point on the line.
+    * @param {Point} p1 The first point.
+    * @param {Point} p2 The second point.
     * @return {number} Slope.
     */    
-    function lineCoefficients(x1, y1, x2, y2) {
+    function lineCoefficients(p1, p2) {
 	return {
-	    m: (y2 - y1)/(x2 - x1),
+	    m: (p2.y - p1.y)/(p2.x - p1.x),
 	}
     }
 
    /** 
     * Returns true if a point falls within a stroke between two points.
     * 
-    * @param {number} x0 x-coordinate of the point.
-    * @param {number} y0 y-coordinate of the point.
-    * @param {number} x1 x-coordinate of a point on the line.
-    * @param {number} y1 y-coordinate of a point on the line.
-    * @param {number} x2 x-coordinate of a point on the line.
-    * @param {number} y2 y-coordinate of a point on the line.
+    * @param {Point} p0 The point
+    * @param {Point} p1 An endpoint of the stroke.
+    * @param {Point} p2 An endpoint of the stroke.
     * @return {number} Distance rounded to the nearest int.
     */
-    function inStroke(x0, y0, x1, y1, x2, y2) {
+    function inStroke(p0, p1,  p2) {
 	var inRectangle = false;
-	if (y1 == y2) {
-	    inRectangle = ((x0 > x1 && x0 < x2) || (x0 < x1 && x0 > x2));
+	if (p1.y == p2.y) {
+	    inRectangle = ((p0.x > p1.x && p0.x < p2.x) || (p0.x < p1.x && p0.x > p2.x));
 	}
-	else if (x1 == x2) {
-	    inRectangle = ((y0 > y1 && y0 < y2) || (y0 < y1 && y0 > y2));
+	else if (p1.x == p2.x) {
+	    inRectangle = ((p0.y > p1.y && p0.y < p2.y) || (p0.y < p1.y && p0.y > p2.y));
 	}
 	else {
-	    var lineEq = lineCoefficients(x1, y1, x2, y2);
+	    var lineEq = lineCoefficients(p1, p2);
 	    var perp = -(1 / lineEq.m);
-	    var b1 = y1 + (-1*perp) * x1;
-	    var b2 = y2 + (-1*perp) * x2;
+	    var b1 = p1.y + (-1*perp) * p1.x;
+	    var b2 = p2.y + (-1*perp) * p2.x;
 	    inRectangle =
-		(y0 < perp * x0 + b1 && y0 > perp * x0 + b2) ||
-		(y0 > perp * x0 + b1 && y0 < perp * x0 + b2);
+		(p0.y < perp * p0.x + b1 && p0.y > perp * p0.x + b2) ||
+		(p0.y > perp * p0.x + b1 && p0.y < perp * p0.x + b2);
 	}
 	return (
-	    (distToLine(x0, y0, x1, y1, x2, y2) < radius && inRectangle) ||
-		distToPoint(x0, y0, x1, y1) < radius ||
-	       distToPoint(x0, y0, x2, y2) < radius);
+	    (distToLine(p0, p1, p2) < radius && inRectangle) ||
+		distToPoint(p0, p1) < radius ||
+		distToPoint(p0, p2) < radius);
     }
     
     function drawCircle(ev) {
 	var pos = mousePos(ev);
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
-	    if (distToPoint(icart.x, icart.y, pos.x, pos.y) < radius) {
+	    if (distToPoint(icart, pos) < radius) {
 		texture(i);
 	    }
 	}
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
 
-    function drawLine(ev, x1, y1, x2, y2) {
+    function drawLine(ev, p1, p2) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
-	    if (inStroke(icart.x, icart.y, x1, y1, x2, y2)) {
+	    if (inStroke(icart, p1, p2)) {
 		texture(i);
 	    }
 	}
@@ -203,7 +207,7 @@ window.addEventListener('load', function(ev) {
 		drawCircle(ev);
 	    }
 	    else {
-		drawLine(ev, prevPoint.x, prevPoint.y, pos.x, pos.y);
+		drawLine(ev, prevPoint, pos);
 	    }
 	    prevPoint = {x: pos.x, y: pos.y};
 	}
@@ -225,10 +229,6 @@ window.addEventListener('load', function(ev) {
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	data = (ctx.getImageData(0, 0,canvas.width, canvas.height)).data;
 	prevPoint = null;
-    }
-
-    function linear(x, y) {
-	return(canvas.width * y + x);
     }
 
     function step(ev) {
