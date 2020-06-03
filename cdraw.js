@@ -253,6 +253,10 @@ window.addEventListener('load', function(ev) {
 	prevPoint = null;
     }
 
+    function disablePan(ev) {
+	if (ev.touches.length == 1) {ev.preventDefault();}
+    }
+    
 // cellular automata functions
    /** 
     * Turns off cellular automate stepping.
@@ -321,20 +325,20 @@ window.addEventListener('load', function(ev) {
 
     //touchscreen event listeners
     canvas.addEventListener("touchstart",  function(ev) {
-	ev.preventDefault();
+	disablePan(ev);
 	mouseDown = true;
 	draw(touchPos(ev));
 	disableConway();
     },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
-	ev.preventDefault();
+	disablePan(ev);
 	mouseDown = false;
 	prevPoint = null;
     }, { passive: false } );
     
     canvas.addEventListener("touchmove",  function(ev) {
-	ev.preventDefault();
+	disablePan(ev);
 	draw(touchPos(ev));
     }, { passive: false });
 
