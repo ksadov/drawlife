@@ -439,6 +439,16 @@ window.addEventListener('load', function(ev) {
     brushSize.addEventListener('input', function() {
 	radius = brushSize.value;
     } , false);
+
+    birthForm.addEventListener('input', function() {
+	updateGeneration(0);
+	birth = parseRule(birthForm.value);
+    } , false);
+
+    survivalForm.addEventListener('input', function() {
+	updateGeneration(0);
+	survival = parseRule(survivalForm.value);
+    } , false);
     
     // toggle textures
     textureB0.addEventListener('click', function() {
