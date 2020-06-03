@@ -283,7 +283,7 @@ window.addEventListener('load', function(ev) {
 
     function tryPinchZoom(ev) {
 	if (ev.touches.length > 0) {
-	    zoom = (canvas.getBoundingClientRect().height/canvas.height);
+	    zoom = (canvas.getBoundingClientRect().height/canvas.height) *
 		(document.getElementById('measurer').offsetWidth /
 		 window.innerWidth);
 	}
