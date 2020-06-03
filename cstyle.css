@@ -23,29 +23,37 @@ input[class=rule]::-webkit-outer-spin-button {
 }
 
 .rules {
-  position: relative
+    padding-bottom:5px;
+    position:relative;
 }
+
 
 .rule {
-  width:30%
+    width:30%;
 }
 
+
 .artControls {
-  position: relative
+    padding-top: 5px;
+    position:relative;
 }
 
 .brushSize {
-  width: 10%
+    width:30%;
+}
+
+.artButton[id="eraserButton"] {
+    width:40%;
 }
 
 .texture {
-  width: 32px;
-  height: 32px;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  border: 1px solid black;
+    width: 32px;
+    height: 32px;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    border: 1px solid black;
 }
 
 @media screen and (max-device-width: 1024px) and (orientation: portrait) {
@@ -56,31 +64,33 @@ input[class=rule]::-webkit-outer-spin-button {
     .controls {
 	width: 100vw;
     }
+    .artButton[id="eraserButton"] {
+	width:20%;	
+    }
 }
 
 @media screen and  (max-device-width: 1024px) and (orientation: landscape) {
     
-    canvasContainer {
-	align: = right;
-    }
-    
     canvas {
 	position: absolute;
-	right: 20px;
+	right: 3vmin;
 	padding: 0px;
 	height: 95vmin;
 	width: auto;
     }
     
   .controls {
-      width: 20vw; /* Set the width of the sidebar */
+      width: 25vw; /* Set the width of the sidebar */
       z-index: 1; /* Stay on top */
       top: 0; /* Stay at the top */
       left: 0;
       overflow-x: hidden; /* Disable horizontal scroll */
       padding: 0vh;
   }
-  
+
+  .textures {
+      width: 100%;
+  }
 }
     
 @media screen and (min-device-width: 1024px) {

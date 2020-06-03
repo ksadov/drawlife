@@ -27,6 +27,9 @@ window.addEventListener('load', function(ev) {
     var textureB6 = document.getElementById('texture6');
     var textureB7 = document.getElementById('texture7');
     var textureB8 = document.getElementById('texture8');
+
+    var urlB =  document.getElementById('urlButton');
+    var link =  document.getElementById('link');
     
     var ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = false;
@@ -131,12 +134,37 @@ window.addEventListener('load', function(ev) {
     }
     
    /** 
-    * Encode data as a URL-safe RLE string.
+    * Encode data in url-safe RLE format.
     * 
     * @return {string} a string representing the encoded data.
     */
     function encodeData() {
-    
+	var encoding = "";
+	var count = 0;
+	var status = "b";
+	for (var z = 0; z < canvas.width*canvas.height; z++)  {
+	    count = 1;
+	    if (data[z] == 0) { status = "b"; }
+	    else { status = "o"; }
+	    while (data[z*4] == data[(z+1)*4]) {
+		count++;
+		z ++;
+	    }
+	    if (count == 1) { encoding += status; }
+	    else { encoding += (count + status); }
+	}
+	return encoding;
+    }
+
+  /** 
+    * Generate a url.
+    * 
+    * @return {string} url.
+    */
+    function makeUrl() {
+	return (
+	    "https://ksadov.github.io/drawlife/?" + "b" + birth.join("") +
+		"s" + survival.join("") + "d" + encodeData())		
     }
 
 // drawing functions
@@ -454,7 +482,7 @@ window.addEventListener('load', function(ev) {
 	updateGeneration(0);
 	survival = parseRule(survivalForm.value);
     } , false);
-    
+
     // toggle textures
     textureB0.addEventListener('click', function() {
 	texture = function(i) {
@@ -520,6 +548,10 @@ window.addEventListener('load', function(ev) {
 	    if  ((c.x - c.y) % 4 == 0 || (c.x - c.y + 1) % 4 == 0)
 	    {markPix(i);}
 	};
+    } , false);
+
+    urlB.addEventListener('click', function() {
+	link.value = makeUrl();
     } , false);
 
 } ,false);

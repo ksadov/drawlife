@@ -35,16 +35,16 @@
     </div>
     
     <div class ="run">
-      <div id="generation"> generation: 0 </div>
+      <span id="generation"> generation: 0 </span>
       <button type="button" id="conwayButton"> run </button>
     </div>
     
     <div class ="artControls">
       <label for="brushSize">brush size:</label>
-      <input type="number" name="brush size"
+      <input type="number" class="brushSize" name="brush size"
 	     id="brushSize" min="1" max="100" value="4">
-      <button type="button" id="eraserButton"> eraser </button>
-      <button type="button" id="clearButton"> clear </button>
+      <button class="artButton" type="button" id="eraserButton"> eraser </button>
+      <button class="artButton" type="button" id="clearButton"> clear </button>
     </div>
     
     <div class="textures">
@@ -58,9 +58,12 @@
       <input class="texture" type="image" id="texture7" src="icons/texture7.png">
       <input class="texture" type="image" id="texture8" src="icons/texture8.png">
     </div>
-  </div>
-  
+
+    <button class="gen" type="button" id="urlButton"> generate link</button>
+    <input type="text" readonly id="link" name="link" rows="4" cols="20"></input>
+    
     <script src="cdraw.js"> </script>
-    <noscript>bruh where's yr JavaScript</noscript>
+    <noscript>bruh where's yr JavaScript</noscript>    
+  </div>
 </body>
 </html>
