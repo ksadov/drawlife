@@ -10,6 +10,9 @@ window.addEventListener('load', function(ev) {
     var body =  document.getElementById('body');
     var clearB = document.getElementById('clearButton');   
     var conwayB = document.getElementById('conwayButton');
+    var generationText = document.getElementById('generation');
+    var generation = 0;
+    var eraserB = document.getElementById('eraserButton');
     var brushSize = document.getElementById('brushSize');
     var textureB0 = document.getElementById('texture0');
     var textureB1 = document.getElementById('texture1');
@@ -251,10 +254,14 @@ window.addEventListener('load', function(ev) {
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 	data = (ctx.getImageData(0, 0,canvas.width, canvas.height)).data;
 	prevPoint = null;
+	updateGeneration(0);
     }
-
+    
+   /** 
+    * Disables one-finger panning.
+    */
     function disablePan(ev) {
-	if (ev.touches.length == 1) {ev.preventDefault();}
+	if (ev.touches.length < 1) {ev.preventDefault();}
     }
     
 // cellular automata functions
@@ -302,8 +309,15 @@ window.addEventListener('load', function(ev) {
 	}
 	ctx.putImageData(new ImageData(newData, canvas.width), 0, 0);
 	data = newData;
+	updateGeneration(generation + 1);
     }
 
+    function updateGeneration(n) {
+	generation = n;
+	generationText.textContent = "generation: " + n;
+	
+    }
+    
 // callbacks
     canvas.addEventListener('mousemove',  function(ev) {
 	draw(mousePos(ev));
@@ -312,6 +326,7 @@ window.addEventListener('load', function(ev) {
     canvas.addEventListener('mousedown', function() {
 	mouseDown = true;
 	disableConway();
+	updateGeneration(0);
     }, false );
     
     canvas.addEventListener('click', function(ev) {
@@ -329,6 +344,7 @@ window.addEventListener('load', function(ev) {
 	mouseDown = true;
 	draw(touchPos(ev));
 	disableConway();
+	updateGeneration(0);
     },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
@@ -349,18 +365,29 @@ window.addEventListener('load', function(ev) {
 	if (conwayOn) { disableConway(); }
 	else { enableConway(); }
     } , false);
+
+    eraserB.addEventListener('click', function() {
+	if (fillC == 0) {
+	    fillC = 255;
+	    eraserB.textContent="brush";
+	}
+	else if (fillC == 255) {
+	    fillC = 0;
+	    eraserB.textContent="eraser";
+	}
+    } , false);
     
     brushSize.addEventListener('input', function() {
 	radius = brushSize.value;
     } , false);
     
+    // toggle textures
     textureB0.addEventListener('click', function() {
 	texture = function(i) {
 	    markPix(i);
 	};
     } , false);
 
-    // toggle textures
     textureB1.addEventListener('click', function() {
 	texture = function(i) {
 	    let c = cartesian(i);

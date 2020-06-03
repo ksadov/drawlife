@@ -10,6 +10,7 @@
   </style>
   </head>
 <body>
+  
   <p>
     <canvas
       width="200"
@@ -19,10 +20,21 @@
       >
     </canvas>
   </p>
+  
   <p>
+    <label for="brushSize">brush size:</label>
+    <input type="number" name="brush size"
+	   id="brushSize" min="1" max="100" value="4">
     <button type="button" id="clearButton"> clear </button>
+  </p>
+  
+  <p>
+    <label for="conwayButton" id="generation"> generation: 0 </label>
     <button type="button" id="conwayButton"> conway </button>
-    <input type="number" id="brushSize" min="1" max="100" value="4">
+  </p>
+  
+  <p>
+    <button type="button" id="eraserButton"> eraser </button>
     <input class="texture" type="image" id="texture0" src="icons/texture0.png">
     <input class="texture" type="image" id="texture1" src="icons/texture1.png">
     <input class="texture" type="image" id="texture2" src="icons/texture2.png">
@@ -33,6 +45,7 @@
     <input class="texture" type="image" id="texture7" src="icons/texture7.png">
     <input class="texture" type="image" id="texture8" src="icons/texture8.png">
   </p>
+  
     <script src="cdraw.js"> </script>
     <noscript>bruh where's yr JavaScript</noscript>
   </body>
