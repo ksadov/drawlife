@@ -1,9 +1,4 @@
-body {
-}
-
 canvas {  
-  display: block;
-  width: 95vw;
   touch-action: pinch-zoom;
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
@@ -12,11 +7,80 @@ canvas {
   border: 1px solid black;
 }
 
-@media screen and (orientation: landscape) {
+/* disable number pon on firefox */
+
+input[class='rule'] {
+    -moz-appearance:textfield;
+}
+
+
+/* Webkit browsers like Safari and Chrome */
+
+input[class=rule]::-webkit-inner-spin-button,
+input[class=rule]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.rules {
+  position: relative
+}
+
+.rule {
+  width:30%
+}
+
+.artControls {
+  position: relative
+}
+
+.brushSize {
+  width: 10%
+}
+
+.texture {
+  width: 32px;
+  height: 32px;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  border: 1px solid black;
+}
+
+@media screen and (max-device-width: 1024px) and (orientation: portrait) {
     canvas {
-	height: 95vh;
+	height: auto;
+	width: 95vmin;
+    }
+    .controls {
+	width: 100vw;
+    }
+}
+
+@media screen and  (max-device-width: 1024px) and (orientation: landscape) {
+    
+    canvasContainer {
+	align: = right;
+    }
+    
+    canvas {
+	position: absolute;
+	right: 20px;
+	padding: 0px;
+	height: 95vmin;
 	width: auto;
     }
+    
+  .controls {
+      width: 20vw; /* Set the width of the sidebar */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      left: 0;
+      overflow-x: hidden; /* Disable horizontal scroll */
+      padding: 0vh;
+  }
+  
 }
     
 @media screen and (min-device-width: 1024px) {
@@ -35,31 +99,6 @@ canvas {
       left: 0;
       overflow-x: hidden; /* Disable horizontal scroll */
       padding: 20px;
-}
+  }
 
-}
-
-/* disable number pon on firefox */
-
-input[class='rule'] {
-    -moz-appearance:textfield;
-}
-
-
-/* Webkit browsers like Safari and Chrome */
-
-input[class=rule]::-webkit-inner-spin-button,
-input[class=rule]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.texture {
-  width: 32px;
-  height: 32px;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  border: 1px solid black;
 }
