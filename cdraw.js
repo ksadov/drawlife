@@ -335,6 +335,7 @@ window.addEventListener('load', function(ev) {
 	conwayB.textContent = "run";
 	birthForm.disabled = false;
 	survivalForm.disabled = false;
+	urlB.disabled = false;
     }
     
    /** 
@@ -345,6 +346,7 @@ window.addEventListener('load', function(ev) {
 	conwayB.textContent = "stop";
 	birthForm.disabled = true;
 	survivalForm.disabled = true;
+	urlB.disabled = true;
     }
     
    /** 
