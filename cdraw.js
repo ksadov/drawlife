@@ -4,7 +4,7 @@ var zoom =
 window.addEventListener('resize', function() {
 	zoom = (canvas.getBoundingClientRect().height/canvas.height);
     } , false);
-					 
+
 window.addEventListener('load', function(ev) {
     var canvas = document.getElementById('canvas');
     var body =  document.getElementById('body');
@@ -276,9 +276,17 @@ window.addEventListener('load', function(ev) {
 	    ev.preventDefault();
 	    return (true);
 	}
-	else return (false);
+	else {
+	    pinchZoom();
+	    return (false);
+	}
     }
-    
+
+    function pinchZoom() {
+    zoom = zoom *
+	    (document.getElementById('measurer').offsetWidth / window.innerWidth);
+    }
+
 // cellular automata functions
    /** 
     * Turns off cellular automate stepping.
