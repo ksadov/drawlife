@@ -12,6 +12,10 @@ window.addEventListener('load', function(ev) {
     var conwayB = document.getElementById('conwayButton');
     var generationText = document.getElementById('generation');
     var generation = 0;
+    var birthForm =  document.getElementById('birth');
+    var birth = parseRule(birthForm.value);
+    var survivalForm =  document.getElementById('survival');
+    var survival = parseRule(survivalForm.value);
     var eraserB = document.getElementById('eraserButton');
     var brushSize = document.getElementById('brushSize');
     var textureB0 = document.getElementById('texture0');
@@ -73,6 +77,7 @@ window.addEventListener('load', function(ev) {
 	mark(data, i, fillC);
     }
 
+    
     /** 
      * Get the coordinates of the mouse on the canvas.
      * 
@@ -281,6 +286,10 @@ window.addEventListener('load', function(ev) {
 	}
     }
 
+    /** 
+    * Attempts to scale zoom after a pinch-zoom event.
+    *
+    */
     function tryPinchZoom(ev) {
 	if (ev.touches.length > 0) {
 	    zoom = (canvas.getBoundingClientRect().height/canvas.height) *
@@ -296,6 +305,8 @@ window.addEventListener('load', function(ev) {
     function disableConway() {
 	conwayOn = false;
 	conwayB.textContent = "conway";
+	birthForm.disabled = false;
+	survivalForm.disabled = false;
     }
     
    /** 
@@ -303,7 +314,9 @@ window.addEventListener('load', function(ev) {
     */
     function enableConway() {
 	conwayOn = true;
-	conwayB.textContent = "stop";	
+	conwayB.textContent = "stop";
+	birthForm.disabled = true;
+	survivalForm.disabled = true;
     }
     
    /** 
@@ -325,11 +338,13 @@ window.addEventListener('load', function(ev) {
 		    };
 		}
 	    }
-	    if (count < 2 || count > 3) {
-		mark(newData, n, 255);
+	    if (!(isDead) && survival.includes(count)) {
 	    }
-	    else if (isDead && count == 3) {
+	    else if (isDead && birth.includes(count)) {
 		mark(newData, n, 0);
+	    }
+	    else {
+		mark(newData, n, 255);
 	    }
 	}
 	ctx.putImageData(new ImageData(newData, canvas.width), 0, 0);
@@ -340,12 +355,24 @@ window.addEventListener('load', function(ev) {
    /** 
     * Update text description of generation.
     *
-    * @param {number} The new generation.
+    * @param {number} n The new generation.
     */
     function updateGeneration(n) {
 	generation = n;
 	generationText.textContent = "generation: " + n;
 	
+    }
+    
+   /** 
+    * Convert a birth or survival rule into a list of digits.
+    *
+    * @param {number} n The unparsed rule.
+    *
+    * @return {number array} The digits.
+    */
+    function parseRule(n) {
+	var digits = n.toString().split('')
+	return (digits.map(Number))
     }
     
 // callbacks
