@@ -311,7 +311,12 @@ window.addEventListener('load', function(ev) {
 	data = newData;
 	updateGeneration(generation + 1);
     }
-
+    
+   /** 
+    * Update text description of generation.
+    *
+    * @param {number} The new generation.
+    */
     function updateGeneration(n) {
 	generation = n;
 	generationText.textContent = "generation: " + n;
