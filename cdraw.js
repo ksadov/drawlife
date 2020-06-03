@@ -124,6 +124,15 @@ window.addEventListener('load', function(ev) {
     function linear(x, y) {
 	return(canvas.width * y + x);
     }
+    
+   /** 
+    * Encode data as a URL-safe RLE string.
+    * 
+    * @return {string} a string representing the encoded data.
+    */
+    function encodeData() {
+    
+    }
 
 // drawing functions
    /** 
@@ -259,9 +268,15 @@ window.addEventListener('load', function(ev) {
     
    /** 
     * Disables one-finger panning.
+    *
+    * @return {boolean} true if there is one finger on the screen
     */
     function disablePan(ev) {
-	if (ev.touches.length < 1) {ev.preventDefault();}
+	if (ev.touches.length < 2) {
+	    ev.preventDefault();
+	    return (true);
+	}
+	else return (false);
     }
     
 // cellular automata functions
@@ -345,22 +360,23 @@ window.addEventListener('load', function(ev) {
 
     //touchscreen event listeners
     canvas.addEventListener("touchstart",  function(ev) {
-	disablePan(ev);
-	mouseDown = true;
-	draw(touchPos(ev));
-	disableConway();
-	updateGeneration(0);
+	if (disablePan(ev)) {
+	    disableConway();
+	    updateGeneration(0);
+	    mouseDown = true;
+	    draw(touchPos(ev));
+	}
     },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
-	disablePan(ev);
-	mouseDown = false;
 	prevPoint = null;
+	mouseDown = false;
     }, { passive: false } );
     
     canvas.addEventListener("touchmove",  function(ev) {
-	disablePan(ev);
-	draw(touchPos(ev));
+	if (disablePan(ev)) {
+	    draw(touchPos(ev));
+	}
     }, { passive: false });
 
     //buttons
