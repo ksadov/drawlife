@@ -277,14 +277,16 @@ window.addEventListener('load', function(ev) {
 	    return (true);
 	}
 	else {
-	    pinchZoom();
 	    return (false);
 	}
     }
 
-    function pinchZoom() {
-    zoom = zoom *
-	    (document.getElementById('measurer').offsetWidth / window.innerWidth);
+    function tryPinchZoom(ev) {
+	if (ev.touches.length > 0) {
+	    zoom = zoom *
+		(document.getElementById('measurer').offsetWidth /
+		 window.innerWidth);
+	}
     }
 
 // cellular automata functions
@@ -379,6 +381,7 @@ window.addEventListener('load', function(ev) {
     canvas.addEventListener("touchend",  function(ev) {
 	prevPoint = null;
 	mouseDown = false;
+	tryPinchZoom(ev);
     }, { passive: false } );
     
     canvas.addEventListener("touchmove",  function(ev) {
