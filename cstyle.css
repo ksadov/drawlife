@@ -17,11 +17,26 @@ canvas {
 	height: 95vh;
 	width: auto;
     }
+}
     
 @media screen and (min-device-width: 1024px) {
     canvas {
+	margin-left: 180px; /* Same width as the sidebar + left position in px */
+	padding: 0px;
 	width: 800px;
 	height: 600px;		   
+    }
+  .controls {
+      height: 100%; /* Full-height: remove this if you want "auto" height */
+      width: 160px; /* Set the width of the sidebar */
+      position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      left: 0;
+      overflow-x: hidden; /* Disable horizontal scroll */
+      padding: 20px;
+}
+
 }
 
 /* disable number pon on firefox */
@@ -29,7 +44,6 @@ canvas {
 input[class='rule'] {
     -moz-appearance:textfield;
 }
-
 
 
 /* Webkit browsers like Safari and Chrome */

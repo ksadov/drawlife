@@ -304,7 +304,7 @@ window.addEventListener('load', function(ev) {
     */
     function disableConway() {
 	conwayOn = false;
-	conwayB.textContent = "conway";
+	conwayB.textContent = "run";
 	birthForm.disabled = false;
 	survivalForm.disabled = false;
     }
@@ -323,6 +323,9 @@ window.addEventListener('load', function(ev) {
     * Advances the cellular automata on the canvas by one step.
     */
     function step() {
+	function nicemod(n, m) {
+	    return ((n % m) + m) % m;
+	}
 	var newData = new Uint8ClampedArray(data);
 	var alive;
 	for (n = 0; n < canvas.width*canvas.height; n++) {
@@ -332,7 +335,9 @@ window.addEventListener('load', function(ev) {
 	    for (i = -1; i < 2; i++) {
 		for (j = -1; j < 2; j++) {
 		    let neighborPos =
-			(linear((c.x+i) % canvas.width, (c.y+j) % canvas.height) * 4);
+			4 * linear
+		    (nicemod((c.x+i), canvas.width),
+		     nicemod ((c.y+j), canvas.height));
 		    if (data[neighborPos] == 0 && !(i == 0 && j == 0)) {
 			count++ ;
 		    };

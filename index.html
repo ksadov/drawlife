@@ -12,48 +12,52 @@
 <body>
   <div id=measurer style="position:absolute;width:100%"></div>
   <p>
-    <canvas
-      width="200"
-      height="150"
-      id="canvas"
-      style="background-color: white"
-      >
-    </canvas>
-  </p>
-  
-  <p>
-    <label for="brushSize">brush size:</label>
-    <input type="number" name="brush size"
-	   id="brushSize" min="1" max="100" value="4">
-    <button type="button" id="clearButton"> clear </button>
-  </p>
-  <p>
-    <label for="birth">B</label>
-    <input class="rule" type="number" name="birth"
-	   id="birth" min="0"  value="3">
-    <label for="survival">S</label>
-    <input class="rule" type="number" name="survival"
-	   id="survival" min="0"  value="23">
-  </p> 
-  <p>
-    <label for="conwayButton" id="generation"> generation: 0 </label>
-    <button type="button" id="conwayButton"> conway </button>
-  </p>
-  
-  <p>
-    <button type="button" id="eraserButton"> eraser </button>
-    <input class="texture" type="image" id="texture0" src="icons/texture0.png">
-    <input class="texture" type="image" id="texture1" src="icons/texture1.png">
-    <input class="texture" type="image" id="texture2" src="icons/texture2.png">
-    <input class="texture" type="image" id="texture3" src="icons/texture3.png">
-    <input class="texture" type="image" id="texture4" src="icons/texture4.png">
-    <input class="texture" type="image" id="texture5" src="icons/texture5.png">
-    <input class="texture" type="image" id="texture6" src="icons/texture6.png">
-    <input class="texture" type="image" id="texture7" src="icons/texture7.png">
-    <input class="texture" type="image" id="texture8" src="icons/texture8.png">
-  </p>
+      <canvas
+	width="200"
+	height="150"
+	id="canvas"
+	style="background-color: white"
+	>
+      </canvas>
+    </p>
+  <div class="controls">
+    
+    <div class="rules">
+      <label for="birth">B</label>
+      <input class="rule" type="number" name="birth"
+	     id="birth" min="0"  value="3">
+      <label for="survival">S</label>
+      <input class="rule" type="number" name="survival"
+	     id="survival" min="0"  value="23">
+    </div>
+    
+    <div class ="run">
+      <div id="generation"> generation: 0 </div>
+      <button type="button" id="conwayButton"> run </button>
+    </div>
+    
+    <div class ="artControls">
+      <label for="brushSize">brush size:</label>
+      <input type="number" name="brush size"
+	     id="brushSize" min="1" max="100" value="4">
+      <button type="button" id="eraserButton"> eraser </button>
+      <button type="button" id="clearButton"> clear </button>
+    </div>
+    
+    <div class="textures">
+      <input class="texture" type="image" id="texture0" src="icons/texture0.png">
+      <input class="texture" type="image" id="texture1" src="icons/texture1.png">
+      <input class="texture" type="image" id="texture2" src="icons/texture2.png">
+      <input class="texture" type="image" id="texture3" src="icons/texture3.png">
+      <input class="texture" type="image" id="texture4" src="icons/texture4.png">
+      <input class="texture" type="image" id="texture5" src="icons/texture5.png">
+      <input class="texture" type="image" id="texture6" src="icons/texture6.png">
+      <input class="texture" type="image" id="texture7" src="icons/texture7.png">
+      <input class="texture" type="image" id="texture8" src="icons/texture8.png">
+    </div>
+  </div>
   
     <script src="cdraw.js"> </script>
     <noscript>bruh where's yr JavaScript</noscript>
-  </body>
+</body>
 </html>
