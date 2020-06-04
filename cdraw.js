@@ -200,10 +200,12 @@ window.addEventListener('load', function(ev) {
     * Assign values based on the url.
     */
     function assignUrl() {
-	//let params = new URLSearchParams(window.location.search.substring(1));
+	let params = new URLSearchParams(window.location.search.substring(1));
+	/*
 	let url = new URL(
 	    'https://ksadov.github.io/drawlife/?b=1&s=2&d=150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o151b49o151b49o151b49o151b49o151b49o152b48o152b48o152b48o153b47o153b47o153b47o154b46o154b46o155b45o155b45o156b44o156b44o157b43o157b43o158b42o159b41o159b41o160b40o161b39o162b38o163b37o164b36o164b36o166b34o167b33o168b32o169b31o170b30o172b28o173b27o175b25o177b23o179b21o181b19o184b16o187b13o192b8o19800b');
 	let params = new URLSearchParams(url.search);
+*/
 	if (params.toString().length > 0) {
 	    let birthV = params.get("b");
 	    birthForm.value = birthV;
