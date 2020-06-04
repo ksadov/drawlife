@@ -349,33 +349,6 @@ window.addEventListener('load', function(ev) {
 	prevPoint = null;
 	updateGeneration(0);
     }
-    
-   /** 
-    * Disables one-finger panning.
-    *
-    * @return {boolean} true if there is one finger on the screen
-    */
-    function disablePan(ev) {
-	if (ev.touches.length < 2) {
-	    ev.preventDefault();
-	    return (true);
-	}
-	else {
-	    return (false);
-	}
-    }
-
-    /** 
-    * Attempts to scale zoom after a pinch-zoom event.
-    *
-    */
-    function tryPinchZoom(ev) {
-	if (ev.touches.length > 0) {
-	    zoom = (canvas.getBoundingClientRect().height/canvas.height) *
-		(document.getElementById('measurer').offsetWidth /
-		 window.innerWidth);
-	}
-    }
 
 // cellular automata functions
    /** 
@@ -483,24 +456,22 @@ window.addEventListener('load', function(ev) {
 
     //touchscreen event listeners
     canvas.addEventListener("touchstart",  function(ev) {
-	if (disablePan(ev)) {
-	    disableConway();
-	    updateGeneration(0);
-	    mouseDown = true;
-	    draw(touchPos(ev));
-	}
+	ev.preventDefault();
+	disableConway();
+	updateGeneration(0);
+	mouseDown = true;
+	draw(touchPos(ev));
     },{ passive: false } );
     
     canvas.addEventListener("touchend",  function(ev) {
+	//ev.preventDefault();
 	prevPoint = null;
 	mouseDown = false;
-	tryPinchZoom(ev);
     }, { passive: false } );
     
     canvas.addEventListener("touchmove",  function(ev) {
-	if (disablePan(ev)) {
-	    draw(touchPos(ev));
-	}
+	ev.preventDefault();
+	draw(touchPos(ev));
     }, { passive: false });
 
     //buttons
