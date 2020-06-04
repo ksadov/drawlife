@@ -50,6 +50,8 @@ window.addEventListener('load', function(ev) {
     //run conway loop in bg
     setInterval (function() { if (conwayOn) {step(ev);} }, 250);
 
+    assignUrl();
+
     /**
      * @typedef {Object} Point
      * @property {number} x - x coordinate
@@ -144,8 +146,8 @@ window.addEventListener('load', function(ev) {
 	var status = "b";
 	for (var z = 0; z < canvas.width*canvas.height; z++)  {
 	    count = 1;
-	    if (data[z] == 0) { status = "b"; }
-	    else { status = "o"; }
+	    if (data[z*4] == 0) { status = "o"; }
+	    else { status = "b"; }
 	    while (data[z*4] == data[(z+1)*4]) {
 		count++;
 		z ++;
@@ -156,15 +158,62 @@ window.addEventListener('load', function(ev) {
 	return encoding;
     }
 
-  /** 
+    /** 
     * Generate a url.
     * 
     * @return {string} url.
     */
     function makeUrl() {
 	return (
-	    "https://ksadov.github.io/drawlife/?" + "b" + birth.join("") +
-		"s" + survival.join("") + "d" + encodeData())		
+	    "https://ksadov.github.io/drawlife/?b=" + birth.join("") +
+		"&s=" + survival.join("") + "&d=" + encodeData());		
+    }
+
+    /** 
+    * Assign the decoded contents of a url-safe run-length-encoding to data.
+    * 
+    * @param {rle} The RLE to decode.
+    */
+    function decodeRLE(rle) {
+	var count = "";
+	var idx = 0;
+	for (var z = 0; z < rle.length; z++)  {
+	    if (!(isNaN(parseInt(rle[z], 10)))) { count += rle[z]; }
+	    else if (!(z==0) && isNaN(parseInt(rle[z-1], 10))) {
+		idx++;
+		markPix(idx);
+	    }
+	    else {
+		if (rle[z] == 'o') {
+		    for (var y = idx; y < parseInt(count) + idx; y++) {
+			markPix(y);
+		    }
+		}
+		idx += parseInt(count);
+		count = "";
+	    }
+	}
+	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
+    }
+
+    /** 
+    * Assign values based on the url.
+    */
+    function assignUrl() {
+	//let params = new URLSearchParams(window.location.search.substring(1));
+	let url = new URL(
+	    'https://ksadov.github.io/drawlife/?b=1&s=2&d=150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o151b49o151b49o151b49o151b49o151b49o152b48o152b48o152b48o153b47o153b47o153b47o154b46o154b46o155b45o155b45o156b44o156b44o157b43o157b43o158b42o159b41o159b41o160b40o161b39o162b38o163b37o164b36o164b36o166b34o167b33o168b32o169b31o170b30o172b28o173b27o175b25o177b23o179b21o181b19o184b16o187b13o192b8o19800b');
+	let params = new URLSearchParams(url.search);
+	if (params.toString().length > 0) {
+	    let birthV = params.get("b");
+	    birthForm.value = birthV;
+	    birth = parseRule(birthV);
+	    let survivalV = params.get("s");
+	    survivalForm.value = survivalV;
+	    survival = parseRule(survivalV);
+	    let rle = params.get("d");
+	    decodeRLE(rle);
+	}
     }
 
 // drawing functions
