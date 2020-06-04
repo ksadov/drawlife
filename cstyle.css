@@ -56,6 +56,10 @@ input[class=rule]::-webkit-outer-spin-button {
     border: 1px solid black;
 }
 
+textarea {
+    resize: vertical;
+}
+
 @media screen and (max-device-width: 1024px) and (orientation: portrait) {
     canvas {
 	height: auto;
