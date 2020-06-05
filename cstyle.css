@@ -46,6 +46,9 @@ input[class=rule]::-webkit-outer-spin-button {
     width:40%;
 }
 
+.textures {
+    padding-top: 5px;
+}
 .texture {
     width: 32px;
     height: 32px;
@@ -56,6 +59,9 @@ input[class=rule]::-webkit-outer-spin-button {
     border: 1px solid black;
 }
 
+.RLEBox {
+    padding-top: 5px;
+}
 textarea {
     resize: vertical;
 }
@@ -66,10 +72,23 @@ textarea {
 	width: 95vmin;
     }
     .controls {
-	width: 100vw;
+	position:relative;
+	width: 95vmin;
     }
     .artButton[id="eraserButton"] {
+	position:relative
 	width:20%;	
+    }
+    
+    .RLEButtons{
+	position: absolute;
+	width:13%;
+    }
+    textarea {
+	resize-max: 100%;
+	position: absolute;
+	left: 14%
+	
     }
 }
 

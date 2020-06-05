@@ -22,6 +22,27 @@
   </div>
   
   <div class="controls">
+    <details>
+  <summary>What's this?</summary>
+  <p>
+    DrawLife is a one-bit drawing tool and a
+    <a href="https://www.conwaylife.com/wiki/Cellular_automaton">
+      cellular automata
+    </a> simulator.
+    Click and drag on the canvas to draw, or paste an
+    <a href = "https://www.conwaylife.com/wiki/Run_Length_Encoded"> RLE </a>
+    pattern into the text area and click "display". Then hit "run" to watch the
+    image evolve according to the
+    <a href = "https://www.conwaylife.com/wiki/Rulestring">rulestring</a>.
+    Think of it as a math-y
+    <a href = "https://en.wikipedia.org/wiki/Sand_mandala"> sand mandala</a>. 
+  </p>
+  <p>
+    You can generate a short link to your drawing, but it'll probably break at
+    some point. So for extra security, click "encode" to generate an RLE and
+    save your image locally.
+  </p>
+</details>
     
     <div class="rules">
       <label for="birth">B</label>
@@ -60,12 +81,15 @@
     <button class="gen" type="button" id="urlButton"> generate link</button>
     <input type="text" readonly id="link" name="link" rows="4" cols="20"></input>
 
-    <button type="button" id="rleGButton"> generate RLE</button>
-    <button type="button" id="rleDButton"> display </button>
-    <textarea id="RLE" name="RLE" rows="4" cols="10"></textarea>
-	
-    <script src="cdraw.js"> </script>
-    <noscript>bruh where's yr JavaScript</noscript>    
+    <div class="RLEBox">
+      <span class="RLEButtons">
+	 <button type="button" id="rleGButton"> encode </button>
+	 <button type="button" id="rleDButton"> display </button>
+      </span>
+	 <textarea id="RLE" name="RLE" rows="3" ></textarea>
+    </div>  
   </div>
+  <script src="cdraw.js"> </script>
+  <noscript>bruh where's yr JavaScript</noscript>  
 </body>
 </html>
