@@ -78,16 +78,17 @@
       <input class="texture" type="image" id="texture8" src="icons/texture8.png">
     </div>
 
-    <button class="gen" type="button" id="urlButton"> generate link</button>
-    <input type="text" readonly id="link" name="link" rows="4" cols="20"></input>
+    <div class="gen">
+      <button type="button" id="urlButton"> generate link</button>
+      <input type="text" readonly id="link" name="link" ></input>
+    </div>
 
     <div class="RLEBox">
-      <span class="RLEButtons">
 	 <button type="button" id="rleGButton"> encode </button>
-	 <button type="button" id="rleDButton"> display </button>
-      </span>
-	 <textarea id="RLE" name="RLE" rows="3" ></textarea>
-    </div>  
+	 <button type="button" id="rleButton"> display </button>
+	 <textarea  class="RLEButton" id="RLE" name="RLE" ></textarea>
+    </div>
+    
   </div>
   <script src="cdraw.js"> </script>
   <noscript>bruh where's yr JavaScript</noscript>  

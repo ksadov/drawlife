@@ -1,3 +1,4 @@
+
 canvas {  
   touch-action: pinch-zoom;
   image-rendering: -moz-crisp-edges;
@@ -5,6 +6,7 @@ canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   border: 1px solid black;
+  padding: 0px;
 }
 
 /* disable number pon on firefox */
@@ -62,33 +64,56 @@ input[class=rule]::-webkit-outer-spin-button {
 .RLEBox {
     padding-top: 5px;
 }
-textarea {
-    resize: vertical;
-}
 
 @media screen and (max-device-width: 1024px) and (orientation: portrait) {
     canvas {
 	height: auto;
-	width: 95vmin;
+	width: 96vmin;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
     }
     .controls {
 	position:relative;
 	width: 95vmin;
+	padding-top: 5px;
     }
     .artButton[id="eraserButton"] {
-	position:relative
-	width:20%;	
+	width: 5em;	
+    }
+
+    .gen {
+	width: 100%;
     }
     
-    .RLEButtons{
-	position: absolute;
-	width:13%;
+    .RLEBox{
+	display: inline-grid;
+	grid-gap: 1vm;
     }
-    textarea {
-	resize-max: 100%;
-	position: absolute;
-	left: 14%
-	
+
+    item1 {
+	grid-row-start:1;
+	grid-row-end:2;
+	grid-column-start:1;
+	grid-column-end:2;		 
+    }
+
+    item2 {
+	grid-row-start:2;
+	grid-row-end:3;
+	grid-column-start:1;
+	grid-column-end:2;		 
+    }
+
+    item3 {
+	grid-row-start:1;
+	grid-row-end:3;
+	grid-column-start:2;
+	grid-column-end:3;		 
+    }
+    
+    textarea {	      
+	padding: 5px;
     }
 }
 
@@ -108,24 +133,41 @@ textarea {
       top: 0; /* Stay at the top */
       left: 0;
       overflow-x: hidden; /* Disable horizontal scroll */
-      padding: 0vh;
   }
 
+  input[id="link"] {
+      100%
+  }
+  
   .textures {
+      display: block;
+      width: 100%;
+      height: 20vh;
+  }
+
+  .gen {
+      display: block;
       width: 100%;
   }
+    
+  textarea {
+      resize: vertical;
+  }
+
+  
 }
     
 @media screen and (min-device-width: 1024px) {
     canvas {
-	margin-left: 180px; /* Same width as the sidebar + left position in px */
+	margin-left: 200px; /* Same width as the sidebar + left position in px */
 	padding: 0px;
 	width: 800px;
 	height: 600px;		   
     }
+    
   .controls {
       height: 100%; /* Full-height: remove this if you want "auto" height */
-      width: 160px; /* Set the width of the sidebar */
+      width: 180px; /* Set the width of the sidebar */
       position: fixed; /* Fixed Sidebar (stay in place on scroll) */
       z-index: 1; /* Stay on top */
       top: 0; /* Stay at the top */
@@ -134,4 +176,9 @@ textarea {
       padding: 20px;
   }
 
+  textarea {
+      width: 160px;
+      resize: vertical;
+    }
+  
 }
