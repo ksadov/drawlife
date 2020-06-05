@@ -44,8 +44,9 @@ input[class=rule]::-webkit-outer-spin-button {
     width:30%;
 }
 
-.artButton[id="eraserButton"] {
-    width:40%;
+.artControls {
+    width:100%
+    display: flex;
 }
 
 .textures {
@@ -78,8 +79,11 @@ input[class=rule]::-webkit-outer-spin-button {
 	width: 95vmin;
 	padding-top: 5px;
     }
-    .artButton[id="eraserButton"] {
-	width: 5em;	
+
+    .artControls {
+	position:relative;
+	width: 95vmin;
+	padding-top: 5px;
     }
 
     .gen {
@@ -87,33 +91,13 @@ input[class=rule]::-webkit-outer-spin-button {
     }
     
     .RLEBox{
-	display: inline-grid;
-	grid-gap: 1vm;
+	display: flex;
+	flex-direction: column;
     }
 
-    item1 {
-	grid-row-start:1;
-	grid-row-end:2;
-	grid-column-start:1;
-	grid-column-end:2;		 
-    }
-
-    item2 {
-	grid-row-start:2;
-	grid-row-end:3;
-	grid-column-start:1;
-	grid-column-end:2;		 
-    }
-
-    item3 {
-	grid-row-start:1;
-	grid-row-end:3;
-	grid-column-start:2;
-	grid-column-end:3;		 
-    }
-    
     textarea {	      
 	padding: 5px;
+	height: 20vh;
     }
 }
 
@@ -165,15 +149,14 @@ input[class=rule]::-webkit-outer-spin-button {
 	height: 600px;		   
     }
     
-  .controls {
-      height: 100%; /* Full-height: remove this if you want "auto" height */
-      width: 180px; /* Set the width of the sidebar */
-      position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-      z-index: 1; /* Stay on top */
-      top: 0; /* Stay at the top */
-      left: 0;
-      overflow-x: hidden; /* Disable horizontal scroll */
-      padding: 20px;
+    .controls {
+	position: fixed;
+	width: 180px;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	overflow-x: hidden;
+	padding: 20px;
   }
 
   textarea {

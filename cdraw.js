@@ -487,15 +487,16 @@ window.addEventListener('load', function(ev) {
     }
     */
 
-    /*
+
     function decodeDataStandard(rle) {
 	var lines = rle.split("$");
 	for (var  y =  (canvas.height - lines.length) / 2;
 	     y < lines.length; y++) {
-	    
+	    for (var i = 0; i < y.length; y++) {
+	    }
 	}
     }
-*/
+
 	
     /** 
     * Converts the current configuration to a standard RLE.
