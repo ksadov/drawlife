@@ -82,7 +82,44 @@ textarea {
     margin: 0 0 3px 3px;
 }
 
-@media screen and (max-device-width: 1024px) and (orientation: portrait) {
+/* iPads */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px)
+and (orientation : landscape) {
+
+        canvas {
+	position: absolute;
+	right: 3vmin;
+	padding: 0px;
+	width: 80vw;
+    }
+    
+  #controls {
+      width: 18vw; /* Set the width of the sidebar */
+      min-width: 160px;
+      max-width: 200px;
+      z-index: 1; /* Stay on top */
+      top: 0; /* Stay at the top */
+      left: 0;
+      overflow-x: hidden; /* Disable horizontal scroll */
+  }
+
+  textarea {
+      height: 3em;
+      width: 13vw;
+  }
+
+  #link {
+      width: 13vw;
+  }
+
+  #sim {
+      width: 18vw;
+  }
+}
+
+@media only screen and (max-device-width: 1024px) and (orientation: portrait) {
     canvas {
 	height: auto;
 	width: 95vmin;
@@ -104,7 +141,8 @@ textarea {
     }
 }
 
-@media screen and  (max-device-width: 1024px) and (orientation: landscape) {
+
+@media only screen and  (max-device-width: 1023px) and (orientation: landscape) {
     
     canvas {
 	position: absolute;
@@ -115,9 +153,8 @@ textarea {
     }
     
   #controls {
-      width: 20vw; /* Set the width of the sidebar */
+      width: 18vw; /* Set the width of the sidebar */
       min-width: 180px;
-      max-width: 200px;
       z-index: 1; /* Stay on top */
       top: 0; /* Stay at the top */
       left: 0;
@@ -126,21 +163,21 @@ textarea {
 
   textarea {
       height: 3em;
-      width: 70%
+      width: 80%
   }
 
   #link {
-      width: 90vw;
+      width: 80%;
   }
 
   #sim {
-      width: 90vw;
+      width: 80%;
   }
 }
     
-@media screen and (min-device-width: 1024px) {
+@media only screen and (min-device-width: 1025px) {
     canvas {
-	margin-left: 200px; /* Same width as the sidebar + left position in px */
+	margin-left: 210px; /* Same width as the sidebar + left position in px */
 	padding: 0px;
 	width: 800px;
 	height: 600px;		   
@@ -170,3 +207,5 @@ textarea {
 	width: 95%;
     } 
 }
+
+    }
