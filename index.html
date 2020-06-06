@@ -21,51 +21,51 @@
       </canvas>
   </div>
   
-  <div class="controls">
-    <details>
-  <summary>What's this?</summary>
-  <p>
-    DrawLife is a one-bit drawing tool and a
-    <a href="https://www.conwaylife.com/wiki/Cellular_automaton">
-      cellular automata
-    </a> simulator.
-    Click and drag on the canvas to draw, or paste an
-    <a href = "https://www.conwaylife.com/wiki/Run_Length_Encoded"> RLE </a>
-    pattern into the text area and click "display". Then hit "run" to watch the
-    image evolve according to the
-    <a href = "https://www.conwaylife.com/wiki/Rulestring">rulestring</a>.
-    Think of it as a math-y
-    <a href = "https://en.wikipedia.org/wiki/Sand_mandala"> sand mandala</a>. 
-  </p>
-  <p>
-    You can generate a short link to your drawing, but it'll probably break at
-    some point. So for extra security, click "encode" to generate an RLE and
-    save your image locally.
-  </p>
-</details>
+  <div id="controls">
     
-    <div class="rules">
+    <details>
+      <summary>What's this?</summary>
+      <p>
+	DrawLife is a one-bit drawing tool and a
+    <a href="https://www.conwaylife.com/wiki/Cellular_automaton">
+	  cellular automata
+	</a> simulator.
+	Click and drag on the canvas to draw, or paste an
+	<a href = "https://www.conwaylife.com/wiki/Run_Length_Encoded"> RLE </a>
+	pattern into the text area and click "display". Then hit "run" to watch
+	the image evolve according to the
+	<a href = "https://www.conwaylife.com/wiki/Rulestring">rulestring</a>.
+	Think of it as a math-y
+	<a href = "https://en.wikipedia.org/wiki/Sand_mandala"> sand mandala</a>
+	.
+      </p>
+      <p>
+	You can generate a short link to your drawing, but it'll probably break
+	at some point. So for extra security, click "encode" to generate an RLE
+	and save your image locally.
+      </p>
+    </details>
+    
+    <div id="sim">
       <label for="birth">B</label>
       <input class="rule" type="number" name="birth"
 	     id="birth" min="0"  value="3">
       <label for="survival">S</label>
       <input class="rule" type="number" name="survival"
-	     id="survival" min="0"  value="23">
-    </div>
-    
-    <div class ="run">
-      <span id="generation"> generation: 0 </span>
+	     id="survival" min="0"  value="23"></input>
       <button type="button" id="conwayButton"> run </button>
+      <span id="generation"> generation: 0 </span>
     </div>
-   <label for="brushSize">brush size:</label>
-    <div class ="artControls">
-      <input type="number" class="brushSize" name="brush size"
-	     id="brushSize" min="1" max="100" value="4">
-      <button class="artButton" type="button" id="eraserButton"> eraser </button>
-      <button class="artButton" type="button" id="clearButton"> clear </button>
+
+    <div id="artControls" >
+    <label for="brushSize"> brush size:</label>
+    <input type="number" id="brushSize" name="brush size" min="0" max="99"
+	   value="4"> </input>
+    <button class="artButton" type="button" id="eraserButton"> eraser </button>
+    <button class="artButton" type="button" id="clearButton"> clear </button>
     </div>
     
-    <div class="textures">
+    <div id="textures">
       <input class="texture" type="image" id="texture0" src="icons/texture0.png">
       <input class="texture" type="image" id="texture1" src="icons/texture1.png">
       <input class="texture" type="image" id="texture2" src="icons/texture2.png">
@@ -77,17 +77,15 @@
       <input class="texture" type="image" id="texture8" src="icons/texture8.png">
     </div>
 
-    <div class="gen">
+    <div>
       <button type="button" id="urlButton"> generate link</button>
       <input type="text" readonly id="link" name="link" ></input>
     </div>
 
-    <div class="RLEBox">
-      <span class="RLEButtons">
-	 <button type="button" id="rleGButton"> encode </button>
-	 <button type="button" id="rleButton"> display </button>
-      </span>
-	 <textarea  class="RLEButton" id="RLE" name="RLE" ></textarea>
+    <div>
+      <button type="button" id="rleGButton"> encode </button>
+      <button type="button" id="rleButton"> display </button>
+      <textarea  class="RLEButton" id="RLE" name="RLE" ></textarea>
     </div>
     
   </div>

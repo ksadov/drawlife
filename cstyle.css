@@ -24,34 +24,44 @@ input[class=rule]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-.rules {
-    padding-bottom:5px;
-    position:relative;
-}
-
-
-.rule {
-    width:30%;
-}
-
-
-.artControls {
-    padding-top: 5px;
-    position:relative;
-}
-
-.brushSize {
-    width:30%;
-}
-
-.artControls {
-    width:100%
+.controls {
     display: flex;
+    flex-direction: column;
+    padding: 5px;
+    align-content: flex-start;
+    padding: 3px;
 }
 
-.textures {
-    padding-top: 5px;
+#controls>* {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    flex-shrink: 1;
+    min-width: 0;
+    min-height: 0;
+    margin: 3px;
 }
+
+div>* {
+    display: flex;
+    margin: 0 0 3px 3px;
+    flex-shrink: 1;
+}
+
+input {
+    width:3em;
+}
+
+#link {
+    width: 90%
+}
+
+#sim {
+    display: flex-block;
+    flex-direction: row;
+    width: 95%;
+}
+
 .texture {
     width: 32px;
     height: 32px;
@@ -60,44 +70,37 @@ input[class=rule]::-webkit-outer-spin-button {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     border: 1px solid black;
+    margin: px;
 }
 
-.RLEBox {
-    padding-top: 5px;
+textarea {
+    display: block;
+    width: 90%
+}
+
+#artControls>* {
+    margin: 0 0 3px 3px;
 }
 
 @media screen and (max-device-width: 1024px) and (orientation: portrait) {
     canvas {
 	height: auto;
-	width: 96vmin;
-	margin-left: auto;
-	margin-right: auto;
+	width: 95vmin;
 	display: block;
     }
-    .controls {
-	position:relative;
-	width: 95vmin;
-	padding-top: 5px;
-    }
-
-    .artControls {
-	position:relative;
-	width: 95vmin;
-	padding-top: 5px;
-    }
-
-    .gen {
-	width: 100%;
-    }
     
-    .RLEBox{
-	display: flex;
-	flex-direction: column;
+    #controls {
+	position:relative;
+	width: 95vmin;
     }
 
-    textarea {	      
-	padding: 5px;
-	height: 20vh;
+    textarea {
+	width: 95vmin;
+	height: 6em;;
+    }
+
+    #link {
+	width: 95vmin;
     }
 }
 
@@ -111,34 +114,28 @@ input[class=rule]::-webkit-outer-spin-button {
 	width: auto;
     }
     
-  .controls {
-      width: 25vw; /* Set the width of the sidebar */
+  #controls {
+      width: 20vw; /* Set the width of the sidebar */
+      min-width: 180px;
+      max-width: 200px;
       z-index: 1; /* Stay on top */
       top: 0; /* Stay at the top */
       left: 0;
       overflow-x: hidden; /* Disable horizontal scroll */
   }
 
-  input[id="link"] {
-      100%
-  }
-  
-  .textures {
-      display: block;
-      width: 100%;
-      height: 20vh;
-  }
-
-  .gen {
-      display: block;
-      width: 100%;
-  }
-    
   textarea {
-      resize: vertical;
+      height: 3em;
+      width: 70%
   }
 
-  
+  #link {
+      width: 90vw;
+  }
+
+  #sim {
+      width: 90vw;
+  }
 }
     
 @media screen and (min-device-width: 1024px) {
@@ -149,7 +146,7 @@ input[class=rule]::-webkit-outer-spin-button {
 	height: 600px;		   
     }
     
-    .controls {
+    #controls {
 	position: fixed;
 	width: 180px;
 	z-index: 1;
@@ -157,11 +154,19 @@ input[class=rule]::-webkit-outer-spin-button {
 	left: 0;
 	overflow-x: hidden;
 	padding: 20px;
-  }
-
-  textarea {
-      width: 160px;
-      resize: vertical;
     }
-  
+
+    textarea {
+	width: 95%;
+	resize: vertical;
+	height: 8em;
+    }
+
+    #link {
+	width: 95%;
+    }
+
+    #sim {
+	width: 95%;
+    } 
 }
