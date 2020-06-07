@@ -494,6 +494,22 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
+    * Determines whether a stadard RLE line end with a number and thus should
+    * be duplicated.
+    * 
+    * @return {number} The number of times that the line is repeated in the 
+    * pattern.
+    */
+    function detectLineDup(line){
+	var count = "";
+	for (var i = line.length - 1; !isNaN(parseInt(line[i])); i--) {
+	    count = line[i] + count;
+	}
+	if (count == "") { return 1; }
+	else { return (parseInt(count)) }
+    }
+
+    /** 
     * Assign the decoded contents of a standard run-length-encoding to data.
     * 
     * @param {rle} The standard RLE to decode.
@@ -511,12 +527,21 @@ window.addEventListener('load', function(ev) {
 	var xOffset = Math.floor((canvas.width - longestLength)/2);
 	var urlSafe = "";
 	var tailLength = 0;
+	var lineDup = 0;
+	var line = "";
 	for (var  lineIndex =  0; lineIndex < lines.length; lineIndex++)
 	{
+	    line = lines[lineIndex];
 	    tailLength = canvas.width - (lineLengths[lineIndex] + xOffset);
-	    urlSafe += xOffset + "b" + lines[lineIndex] + tailLength + "b";
+	    lineDup = detectLineDup(line);
+	    if (lineDup > 1) { line = line.slice(0, -1); }
+	    urlSafe += xOffset + "b" + line + tailLength + "b";
+	    for (var i = 0; i < lineDup - 1; i++) {
+		urlSafe += canvas.width + "b";
+		console.log(urlSafe);
+		
+	    }
 	}
-	console.log(longestLength);
 	decodeRLE(urlSafe);
     }
 
