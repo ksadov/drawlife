@@ -185,14 +185,12 @@ window.addEventListener('load', function(ev) {
 	    if (!(isNaN(parseInt(rle[z], 10)))) {
 		count += rle[z];
 	    }
-	    else if (isNaN(parseInt(rle[z-1], 10))) {
+	    else if (z > 0 && (isNaN(parseInt(rle[z-1], 10))) || (z == 0)) {
 		if (rle[z] == 'o') {
 		    markPix(idx);
 		}
 		idx++;
-		count = "";
 	    }
-	    else if (z == 0) idx++;
 	    else {
 		if (rle[z] == 'o') {
 		    for (var y = idx; y < idx + parseInt(count); y++) {
@@ -203,7 +201,7 @@ window.addEventListener('load', function(ev) {
 		count = "";
 	    }
 	}
-	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
+	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);	
     }
 
     /** 
@@ -480,15 +478,17 @@ window.addEventListener('load', function(ev) {
     * @return {number} the number of cells in a RLE line.
     */
     function lineLength(l) {
+	var acc = "";
 	var count = 0;
 	for (var i = 0; i < l.length; i++) { 
 	    if (!(isNaN(parseInt(l[i], 10)))) {
-		count += parseInt(l[i]);
+		acc += l[i];
 	    }
-	    else if (!(i==0) && isNaN(parseInt(l[i-1], 10))) {
+	    else if (!(i==0) && isNaN(parseInt(l[i-1], 10))|| (i == 0)) {
 		count++;
 	    }
-	    else if (i == 0) { count++; }
+	    else { count += parseInt(acc); acc = ""; }
+	    
 	}
 	return count;
     }
@@ -517,7 +517,6 @@ window.addEventListener('load', function(ev) {
 	    urlSafe += xOffset + "b" + lines[lineIndex] + tailLength + "b";
 	}
 	console.log(longestLength);
-	console.log(urlSafe);
 	decodeRLE(urlSafe);
     }
 
