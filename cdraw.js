@@ -182,14 +182,20 @@ window.addEventListener('load', function(ev) {
 	var count = "";
 	var idx = 0;
 	for (var z = 0; z < rle.length; z++)  {
-	    if (!(isNaN(parseInt(rle[z], 10)))) { count += rle[z]; }
-	    else if (!(z==0) && isNaN(parseInt(rle[z-1], 10))) {
-		idx++;
-		markPix(idx);
+	    if (!(isNaN(parseInt(rle[z], 10)))) {
+		count += rle[z];
 	    }
+	    else if (isNaN(parseInt(rle[z-1], 10))) {
+		if (rle[z] == 'o') {
+		    markPix(idx);
+		}
+		idx++;
+		count = "";
+	    }
+	    else if (z == 0) idx++;
 	    else {
 		if (rle[z] == 'o') {
-		    for (var y = idx; y < parseInt(count) + idx; y++) {
+		    for (var y = idx; y < idx + parseInt(count); y++) {
 			markPix(y);
 		    }
 		}
@@ -445,7 +451,7 @@ window.addEventListener('load', function(ev) {
     * 
     * @return {string} a string representing the encoded data.
     */
-    /*
+
     function encodeDataStandard() {
 	var encoding = "";
 	var count = 0;
@@ -466,35 +472,53 @@ window.addEventListener('load', function(ev) {
 	}
 	return encoding;
     }
-    */
+ 
     /** 
     * Returns the number of cells in a RLE line.
     *
-    * @return {number} what I just said
+    * @param {string} a representation of a line in RLE.
+    * @return {number} the number of cells in a RLE line.
     */
-    /*
     function lineLength(l) {
-	var count;
+	var count = 0;
 	for (var i = 0; i < l.length; i++) { 
-	    if (!(isNaN(parseInt(rle[z], 10)))) {
-		count += parseInt(rle[z]);
+	    if (!(isNaN(parseInt(l[i], 10)))) {
+		count += parseInt(l[i]);
 	    }
-	    else if (!(z==0) && isNaN(parseInt(rle[z-1], 10))) {
+	    else if (!(i==0) && isNaN(parseInt(l[i-1], 10))) {
 		count++;
 	    }
+	    else if (i == 0) { count++; }
 	}
 	return count;
     }
+
+    /** 
+    * Assign the decoded contents of a standard run-length-encoding to data.
+    * 
+    * @param {rle} The standard RLE to decode.
     */
-
-
     function decodeDataStandard(rle) {
-	var lines = rle.split("$");
-	for (var  y =  (canvas.height - lines.length) / 2;
-	     y < lines.length; y++) {
-	    for (var i = 0; i < y.length; y++) {
-	    }
+	clear();
+	if (rle[rle.length - 1] == "!") {
+	    rle = rle.slice(0, -1);
 	}
+	rle = rle.replace(/(\r\n|\n|\r)/gm, "");
+	var lines = rle.split("$");
+	var yOffset = Math.floor((canvas.height - lines.length)/2) - 1;
+	let lineLengths = lines.map(x => lineLength(x));
+	var longestLength = lineLengths.reduce((x, y) => Math.max(x, y));
+	var xOffset = Math.floor((canvas.width - longestLength)/2);
+	var urlSafe = "";
+	var tailLength = 0;
+	for (var  lineIndex =  0; lineIndex < lines.length; lineIndex++)
+	{
+	    tailLength = canvas.width - (lineLengths[lineIndex] + xOffset);
+	    urlSafe += xOffset + "b" + lines[lineIndex] + tailLength + "b";
+	}
+	console.log(longestLength);
+	console.log(urlSafe);
+	decodeRLE(urlSafe);
     }
 
 	
@@ -663,6 +687,12 @@ window.addEventListener('load', function(ev) {
     
     GB.addEventListener('click', function() {
 	RLEbox.value = "WIP";
+    } , false);
+
+    DB.addEventListener('click', function() {
+	clear();
+	disableConway();
+	decodeDataStandard(RLEbox.value);
     } , false);
     
 } ,false);
