@@ -454,7 +454,26 @@ window.addEventListener('load', function(ev) {
 	var encoding = "";
 	var count = 0;
 	var status = "b";
-	var lineacc = 0;
+	for (var y = 0; y < canvas.height; y++) {
+	    count = 1;
+	    for (var x = 0; x < canvas.width; x++) {
+		if (data[linear(x, y)*4] == data[linear(x-1, y)*4] || x == 0) {
+		    count++;
+		}  
+		else {
+		    encoding += count + status;
+		    count = 1;
+		}
+		if (data[linear(x, y)*4] == 0) {
+		    status = 'o';
+		}
+		else {
+		    status = 'b';
+		}
+	    }
+	    encoding += (count - 1) + 'b' + '$';
+	}
+/*
 	for (var z = 0; z < canvas.width*canvas.height; z++)  {
 	    count = 1;
 	    if (data[z*4] == 0) { status = "o"; }
@@ -468,6 +487,7 @@ window.addEventListener('load', function(ev) {
 	    else { encoding += (count + status); }
 	    if (lineacc == canvas.width - 1) {encoding += "$"; lineacc = 0};
 	}
+*/
 	return encoding;
     }
  
@@ -550,7 +570,7 @@ window.addEventListener('load', function(ev) {
     *
     * @return {string} The RLE.
     */
-    /*
+
     function getStandardRLE() {
 	annotated = encodeDataStandard();
 	return (
@@ -560,8 +580,6 @@ window.addEventListener('load', function(ev) {
 		" , rule = B" + birth.join("") + "/S" + survival.join("") +
 		"\n" + annotated)
     }
-*/
-
     
 // callbacks
     canvas.addEventListener('mousemove',  function(ev) {
@@ -708,7 +726,7 @@ window.addEventListener('load', function(ev) {
     } , false);
     
     GB.addEventListener('click', function() {
-	RLEbox.value = "WIP";
+	RLEbox.value = encodeDataStandard();
     } , false);
 
     DB.addEventListener('click', function() {
