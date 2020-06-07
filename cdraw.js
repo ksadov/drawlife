@@ -368,6 +368,8 @@ window.addEventListener('load', function(ev) {
 	birthForm.disabled = false;
 	survivalForm.disabled = false;
 	urlB.disabled = false;
+	GB.disabled = false;
+	DB.disabled = false;
     }
     
    /** 
@@ -379,6 +381,8 @@ window.addEventListener('load', function(ev) {
 	birthForm.disabled = true;
 	survivalForm.disabled = true;
 	urlB.disabled = true;
+	GB.disabled = true;
+	DB.disabled = true;
     }
     
    /** 
@@ -731,7 +735,6 @@ window.addEventListener('load', function(ev) {
 
     DB.addEventListener('click', function() {
 	clear();
-	disableConway();
 	decodeDataStandard(RLEbox.value);
     } , false);
     
