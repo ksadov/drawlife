@@ -494,13 +494,12 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Determines whether a stadard RLE line end with a number and thus should
-    * be duplicated.
+    * Determines whether a stadard RLE line end with a numbers.
     * 
-    * @return {number} The number of times that the line is repeated in the 
-    * pattern.
+    * @return {number} The number at the end of the RLE line, 1 if no number
+    * detected.
     */
-    function detectLineDup(line){
+    function lineEndNumber(line){
 	var count = "";
 	for (var i = line.length - 1; !isNaN(parseInt(line[i])); i--) {
 	    count = line[i] + count;
@@ -525,7 +524,7 @@ window.addEventListener('load', function(ev) {
 	let lineLengths = lines.map(x => lineLength(x));
 	var longestLength = lineLengths.reduce((x, y) => Math.max(x, y));
 	var xOffset = Math.floor((canvas.width - longestLength)/2);
-	var urlSafe = "";
+	var urlSafe = (yOffset * canvas.width) + "b";
 	var tailLength = 0;
 	var lineDup = 0;
 	var line = "";
@@ -533,13 +532,12 @@ window.addEventListener('load', function(ev) {
 	{
 	    line = lines[lineIndex];
 	    tailLength = canvas.width - (lineLengths[lineIndex] + xOffset);
-	    lineDup = detectLineDup(line);
+	    lineDup = lineEndNumber(line);
 	    if (lineDup > 1) { line = line.slice(0, -1); }
 	    urlSafe += xOffset + "b" + line + tailLength + "b";
 	    for (var i = 0; i < lineDup - 1; i++) {
 		urlSafe += canvas.width + "b";
 		console.log(urlSafe);
-		
 	    }
 	}
 	decodeRLE(urlSafe);
