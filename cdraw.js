@@ -527,7 +527,7 @@ window.addEventListener('load', function(ev) {
 	rle = rle.replace(/(\r\n|\n|\r)/gm, "");
 	var lines = rle.split("$");
 	let lineLengths = lines.map(x => lineLength(x));
-	var xOffset =  Math.round((canvas.width - x )/2);
+	var xOffset =  Math.round((canvas.width - x)/2);
 	var yOffset =  Math.round((canvas.height - y)/2);
 	var urlSafe = "";
 	if (yOffset > 0){ yOffset = (yOffset * canvas.width) + "b";}
@@ -545,13 +545,11 @@ window.addEventListener('load', function(ev) {
 	    endNum = lineEndNumber(line);
 	    if (endNum > 1) { line = line.slice(0, -1); }
 	    urlSafe += head + line + tail;
-	    console.log (head + line + tail);
 	    for (var i = 0; i < endNum - 1; i++) {
 		urlSafe += canvas.width + "b";
 	    }
 	}
-	console.log(urlSafe);
-	decodeRLE(urlSafe);
+	decodeRLE((canvas.width * yOffset) + 'b' + urlSafe);
     }
 
 	
@@ -575,23 +573,42 @@ window.addEventListener('load', function(ev) {
     /** 
     * Returns the width, height and RLE encoding of the argument.
     *
-    * @param: input to RLEBox
+    * @param: {string} i input to RLEBox
     * 
     * @return {x: number, y: number, rle: string} The width, height, and RLE
     * encoding of the input.
     */
     function parseInput(i) {
 	i = i.replace(/ /gm, "");
-	console.log(i.match(/((([0-9]+)|[bo$\n])+)/g).slice(-1));
+	x = i.match(/x=([0-9]+)/);
+	y = i.match(/y=([0-9]+)/);
+	b = i.match(/([0-9]+)\//);
+	s = i.match(/[\/].*([0-9]+)\n.*/);
+	rle = i.match(/\n((([0-9]+)|[bo$\n])+)/g);
+	if (x == null || y == null || b == null || s == null || rle == null) {
+	    RLEError("unable to parse encoding")
+	}
+	if (parseInt(x[1]) > canvas.width || parseInt(y[1]) > canvas.height) {
+	    RLEError("dimensions too large to display")
+	}
 	return {
-	    x : i.match(/x=([0-9]+)/)[1],
-	    y : i.match(/y=([0-9]+)/)[1],
-	    b : (i.match(/B([0-9]+)/)[0]).substr(1),
-	    s : (i.match(/S([0-9]+)./)[0]).substr(1),
-	    rle : i.match(/\n((([0-9]+)|[bo$\n])+)/g)[0]
+	    x : x[1],
+	    y : y[1],
+	    b : (b[0]).substr(1),
+	    s : (s[0]).substr(1),
+	    rle : rle[0]
 	}
     }
-    
+
+    /** 
+    * Displays an error message to the RLE box and throws an error.
+    *
+    * @param {string} err the message to throw and display
+    */
+    function RLEError(err) {
+	RLEbox.value = err + "\n" + RLEbox.value;
+	throw(err);
+    }
 // callbacks
     canvas.addEventListener('mousemove',  function(ev) {
 	draw(mousePos(ev));
