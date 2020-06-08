@@ -541,7 +541,7 @@ window.addEventListener('load', function(ev) {
 	{
 	    line = lines[lineIndex];
 	    tailLength = canvas.width - (lineLengths[lineIndex] + xOffset);
-	    if (tailLength > 0) {console.log(lineLengths);tail = tailLength + "b"; }
+	    if (tailLength > 0) { tail = tailLength + "b"; }
 	    endNum = lineEndNumber(line);
 	    if (endNum > 1) { line = line.slice(0, -1); }
 	    urlSafe += head + line + tail;
@@ -549,7 +549,8 @@ window.addEventListener('load', function(ev) {
 		urlSafe += canvas.width + "b";
 	    }
 	}
-	decodeRLE((canvas.width * yOffset) + 'b' + urlSafe);
+	console.log(yOffset);
+	decodeRLE(yOffset + 'b' + urlSafe);
     }
 
 	
