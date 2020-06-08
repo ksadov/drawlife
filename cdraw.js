@@ -446,8 +446,6 @@ window.addEventListener('load', function(ev) {
 	return (digits.map(Number))
     }
 
- //// WIP
-
     /** 
     * Encode data in standard RLE format.
     * 
@@ -476,7 +474,7 @@ window.addEventListener('load', function(ev) {
 	    }
 	    encoding += count + prevState + '$';
 	}
-	return encoding;
+	return encoding.slice(0, -1) + '!';
     }
  
     /** 
@@ -528,7 +526,6 @@ window.addEventListener('load', function(ev) {
 	}
 	rle = rle.replace(/(\r\n|\n|\r)/gm, "");
 	var lines = rle.split("$");
-	lines = lines.slice(0, -1);
 	let lineLengths = lines.map(x => lineLength(x));
 	var xOffset =  Math.round((canvas.width - x )/2);
 	var yOffset =  Math.round((canvas.height - y)/2);
@@ -585,12 +582,13 @@ window.addEventListener('load', function(ev) {
     */
     function parseInput(i) {
 	i = i.replace(/ /gm, "");
+	console.log(i.match(/((([0-9]+)|[bo$\n])+)/g).slice(-1));
 	return {
 	    x : i.match(/x=([0-9]+)/)[1],
 	    y : i.match(/y=([0-9]+)/)[1],
 	    b : (i.match(/B([0-9]+)/)[0]).substr(1),
 	    s : (i.match(/S([0-9]+)./)[0]).substr(1),
-	    rle : i.match(/((([0-9]+)|[bo$])+)/g).slice(-1)[0]
+	    rle : i.match(/\n((([0-9]+)|[bo$\n])+)/g)[0]
 	}
     }
     
