@@ -618,11 +618,6 @@ window.addEventListener('load', function(ev) {
      */
     function assignUrl() {
 	let params = new URLSearchParams(window.location.search.substring(1));
-/*
-	params = new URLSearchParams(
-	    new URL('https://ksadov.github.io/drawlife/?v=POHABEp').search);
-*/
-	console.log(params);
 	if (params.toString().length > 0 ) {
 	    var xhr = new XMLHttpRequest();
 	    xhr.addEventListener("load", decodeListener);
