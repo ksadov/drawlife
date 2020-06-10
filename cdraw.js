@@ -83,10 +83,10 @@ window.addEventListener('load', function(ev) {
      * @return {number} Distance rounded to the nearest int.
      */
     function distToLine(p0, p1, p2) {
-	var numerator = Math.abs((p2.y - p1.y)*p0.x -
+	const numerator = Math.abs((p2.y - p1.y)*p0.x -
                                       (p2.x - p1.x)*p0.y +
                                       p2.x*p1.y - p2.y*p1.x);
-	var denominator = Math.sqrt(((p2.y - p1.y) ** 2 + (p2.x - p1.x) ** 2));
+	const denominator = Math.sqrt(((p2.y - p1.y) ** 2 + (p2.x - p1.x) ** 2));
 	if (denominator == 0) {
 	    return distToPoint(p0, p1);
 	}
@@ -117,7 +117,7 @@ window.addEventListener('load', function(ev) {
      * @return {number} Distance rounded to the nearest int.
      */
     function inStroke(p0, p1,  p2) {
-	var inRectangle = false;
+	let inRectangle = false;
 	if (p1.y == p2.y) {
 	    inRectangle = ((p0.x > p1.x && p0.x < p2.x) || (p0.x < p1.x && p0.x > p2.x));
 	}
@@ -125,10 +125,10 @@ window.addEventListener('load', function(ev) {
 	    inRectangle = ((p0.y > p1.y && p0.y < p2.y) || (p0.y < p1.y && p0.y > p2.y));
 	}
 	else {
-	    var lineEq = lineCoefficients(p1, p2);
-	    var perp = -(1 / lineEq.m);
-	    var b1 = p1.y + (-1*perp) * p1.x;
-	    var b2 = p2.y + (-1*perp) * p2.x;
+	    const lineEq = lineCoefficients(p1, p2);
+	    const perp = -(1 / lineEq.m);
+	    const b1 = p1.y + (-1*perp) * p1.x;
+	    const b2 = p2.y + (-1*perp) * p2.x;
 	    inRectangle =
 		(p0.y < perp * p0.x + b1 && p0.y > perp * p0.x + b2) ||
 		(p0.y > perp * p0.x + b1 && p0.y < perp * p0.x + b2);
@@ -282,7 +282,7 @@ window.addEventListener('load', function(ev) {
      * @return {number array} The list of digits.
      */
     function parseRule(n) {
-	var digits = n.toString().split('')
+	const digits = n.toString().split('')
 	return (digits.map(Number))
     }
 
@@ -292,9 +292,9 @@ window.addEventListener('load', function(ev) {
      * @return {string} a string representing the encoded data.
      */
     function encodeDataStandard() {
-	var encoding = "";
-	var count = 1;
-	var prevState = "";
+	let encoding = "";
+	let count = 1;
+	let prevState = "";
 	for (var y = 0; y < canvas.height; y++) {
 	    prevState = "";
 	    count = 1;
@@ -323,8 +323,8 @@ window.addEventListener('load', function(ev) {
      * @return {number} the number of cells in a RLE line.
      */
     function lineLength(l) {
-	var acc = "";
-	var count = 0;
+	let acc = "";
+	let count = 0;
 	for (var i = 0; i < l.length; i++) { 
 	    if (!(isNaN(parseInt(l[i], 10)))) {
 		acc += l[i];
@@ -345,7 +345,7 @@ window.addEventListener('load', function(ev) {
      * detected.
      */
     function lineEndNumber(line){
-	var count = "";
+	let count = "";
 	for (var i = line.length - 1; !isNaN(parseInt(line[i])); i--) {
 	    count = line[i] + count;
 	}
@@ -478,7 +478,7 @@ window.addEventListener('load', function(ev) {
      * @return {Point} the 2d coordinates of the mouse. 
      */
     function mousePos(ev) {
-	var rect = canvas.getBoundingClientRect();
+	const rect = canvas.getBoundingClientRect();
 	return {
 	    x: Math.round((ev.clientX - rect.left)/zoom),
 	    y: Math.round((ev.clientY - rect.top)/zoom)
@@ -492,7 +492,7 @@ window.addEventListener('load', function(ev) {
      * @return {Point} The 2d coordinates of the touch. 
      */
     function touchPos(ev) {
-	var rect = canvas.getBoundingClientRect();
+	const rect = canvas.getBoundingClientRect();
 	return{
 	    x: Math.round(
 		(ev.targetTouches[0].pageX - rect.left)/zoom),
@@ -531,9 +531,9 @@ window.addEventListener('load', function(ev) {
      * @return {string} a string representing the encoded canvas data.
      */
     function encodeData() {
-	var encoding = "";
-	var count = 0;
-	var status = "b";
+	let encoding = "";
+	let count = 0;
+	let status = "b";
 	for (var z = 0; z < canvas.width*canvas.height; z++)  {
 	    count = 1;
 	    if (data[z*4] == 0) { status = "o"; }
@@ -583,8 +583,8 @@ window.addEventListener('load', function(ev) {
      * @param {rle} The RLE to decode.
      */
     function decodeRLE(rle) {
-	var count = "";
-	var idx = 0;
+	let count = "";
+	let idx = 0;
 	for (var z = 0; z < rle.length; z++)  {
 	    if (!(isNaN(parseInt(rle[z], 10)))) {
 		count += rle[z];
@@ -605,7 +605,7 @@ window.addEventListener('load', function(ev) {
 		count = "";
 	    }
 	}
-	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);	
+	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);	1
     }
 
     /** 
@@ -775,7 +775,7 @@ window.addEventListener('load', function(ev) {
 
     DB.addEventListener('click', function() {
 	clear();
-	var vals = parseInput(RLEbox.value);
+	const vals = parseInput(RLEbox.value);
 	decodeDataStandard(vals.rle, vals.x, vals.y);
 	birthForm.value = vals.b;
 	birth = parseRule(vals.b);
