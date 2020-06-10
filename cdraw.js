@@ -163,15 +163,33 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Generate a url.
-    * 
-    * @return {string} url.
+    * Generate a url and display it in the url box.
     */
     function makeUrl() {
-	return (
-	    "https://ksadov.github.io/drawlife/?b=" + birth.join("") +
-		"&s=" + survival.join("") + "&d=" + encodeData());		
+	const longUrl = ("https://ksadov.github.io/drawlife/?b=" +
+	      birth.join("") + "&s=" + survival.join("") +
+			 "&d=" + encodeData());
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", reqListener);
+	xhr.open("POST",
+		 "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
+		 true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.overrideMimeType( "application/json; charset=x-user-defined" );
+	xhr.send(JSON.stringify(new String (longUrl)));
     }
+
+    /** 
+    * Creates a full link after receiving the filename.
+    *
+    * @returns {string} the full link
+    */
+    function reqListener() {
+	const c = this.responseText;
+	console.log(c);
+	link.value = "http://drawlife.cf.s3-website-us-east-1.amazonaws.com/" +
+	    JSON.parse(c).key;
+    }    
 
     /** 
     * Assign the decoded contents of a url-safe run-length-encoding to data.
@@ -751,7 +769,7 @@ window.addEventListener('load', function(ev) {
     } , false);
 
     urlB.addEventListener('click', function() {
-	link.value = makeUrl();
+	makeUrl();
     } , false);
     
     GB.addEventListener('click', function() {
