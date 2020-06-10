@@ -563,7 +563,7 @@ window.addEventListener('load', function(ev) {
 	      birth.join("") + ", \"s\":" + survival.join("") +
 			 ", \"d\": \"" + encodeData() + "\"}");
 	var xhr = new XMLHttpRequest();
-	xhr.addEventListener("load", reqListener);
+	xhr.addEventListener("load", makeListener);
 	xhr.open("POST",
 		 "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
 		 true);
@@ -576,7 +576,7 @@ window.addEventListener('load', function(ev) {
      * Creates a full url after receiving an S3 filename and displays it in the
      * link box.
      */
-    function reqListener() {
+    function makeListener() {
 	const c = this.responseText;
 	link.value = "https://ksadov.github.io/drawlife/?v=" +
 	    JSON.parse(c).key;
@@ -618,32 +618,27 @@ window.addEventListener('load', function(ev) {
      */
     function assignUrl() {
 	let params = new URLSearchParams(window.location.search.substring(1));
-	if (params.toString().length == 0 ) {
+/*
+	params = new URLSearchParams(
+	    new URL('https://ksadov.github.io/drawlife/?v=POHABEp').search);
+*/
+	console.log(params);
+	if (params.toString().length > 0 ) {
 	    var xhr = new XMLHttpRequest();
-	    xhr.addEventListener("load", contentListener);
+	    xhr.addEventListener("load", decodeListener);
 	    xhr.open("POST",
 		     "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
 		     true);
 	    xhr.setRequestHeader('Content-Type', 'application/json');
 	    xhr.overrideMimeType( "application/json; charset=x-user-defined" );
-	    //xhr.send(JSON.stringify(new String (params.get("v"))));
-	    xhr.send(JSON.stringify(new String ("POHABEp")));
+	    xhr.send(JSON.stringify(new String (params.get("v"))));
 	}
-/*	    
-	if (params.toString().length > 0) {
-	    let birthV = params.get("b");
-	    birthForm.value = birthV;
-	    birth = parseRule(birthV);
-	    let survivalV = params.get("s");
-	    survivalForm.value = survivalV;
-	    survival = parseRule(survivalV);
-	    let rle = params.get("d");
-	    decodeRLE(rle);
-	}
-*/
     }
     
-    function contentListener() {
+    /** 
+     * Assigns data and rules based on url parameters.
+     */
+    function decodeListener() {
 	const vals = JSON.parse(this.responseText);
 	const birthV = vals.b;
 	birthForm.value = birthV;
