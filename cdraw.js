@@ -515,7 +515,8 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Assign the decoded contents of a standard run-length-encoding to data.
+    * Assign the decoded contents of a standard run-length-encoding and
+    * rulestring to data.
     * 
     * @param {rle} The standard RLE to decode.
     */
@@ -549,7 +550,6 @@ window.addEventListener('load', function(ev) {
 		urlSafe += canvas.width + "b";
 	    }
 	}
-	console.log(yOffset);
 	decodeRLE(yOffset + 'b' + urlSafe);
     }
 
@@ -584,8 +584,8 @@ window.addEventListener('load', function(ev) {
 	x = i.match(/x=([0-9]+)/);
 	y = i.match(/y=([0-9]+)/);
 	b = i.match(/([0-9]+)\//);
-	s = i.match(/[\/].*([0-9]+)\n.*/);
-	rle = i.match(/\n((([0-9]+)|[bo$\n])+)/g);
+	s = i.match(/([0-9]+)\n.*/);
+	rle = i.match(/\n((([0-9]+)|[bo$\n])+)/);
 	if (x == null || y == null || b == null || s == null || rle == null) {
 	    RLEError("unable to parse encoding")
 	}
@@ -595,8 +595,8 @@ window.addEventListener('load', function(ev) {
 	return {
 	    x : x[1],
 	    y : y[1],
-	    b : (b[0]).substr(1),
-	    s : (s[0]).substr(1),
+	    b : parseInt(b[1]),
+	    s : parseInt(s[1]),
 	    rle : rle[0]
 	}
     }
@@ -762,6 +762,10 @@ window.addEventListener('load', function(ev) {
 	clear();
 	var vals = parseInput(RLEbox.value);
 	decodeDataStandard(vals.rle, vals.x, vals.y);
+	birthForm.value = vals.b;
+	birth = parseRule(vals.b);
+	survivalForm.value = vals.s;
+	survival = parseRule(vals.s);
     } , false);
     
 } ,false);
