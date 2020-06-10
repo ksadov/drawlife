@@ -572,7 +572,6 @@ window.addEventListener('load', function(ev) {
      */
     function reqListener() {
 	const c = this.responseText;
-	console.log(c);
 	link.value = "http://drawlife.cf.s3-website-us-east-1.amazonaws.com/" +
 	    JSON.parse(c).key;
     }    
