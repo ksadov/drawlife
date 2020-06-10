@@ -627,7 +627,7 @@ window.addEventListener('load', function(ev) {
 	    xhr.setRequestHeader('Content-Type', 'application/json');
 	    xhr.overrideMimeType( "application/json; charset=x-user-defined" );
 	    //xhr.send(JSON.stringify(new String (params.get("v"))));
-	    xhr.send(JSON.stringify(new String ("ttrCqyr")));
+	    xhr.send(JSON.stringify(new String ("POHABEp")));
 	}
 /*	    
 	if (params.toString().length > 0) {
@@ -643,9 +643,8 @@ window.addEventListener('load', function(ev) {
 */
     }
     
-    function contentListener()
-	const vals = this.responseText;
-	console.log(vals)
+    function contentListener() {
+	const vals = JSON.parse(this.responseText);
 	const birthV = vals.b;
 	birthForm.value = birthV;
 	birth = parseRule(birthV);
