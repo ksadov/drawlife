@@ -61,182 +61,6 @@ window.addEventListener('load', function(ev) {
      * @property {number} x - x coordinate
      * @property {number} y - y coordinate
      */
-    
-    /** 
-     * Marks a pixel in a specificed Uint8ClampedArray with a specified fill.
-     * 
-     * @param {Uint8ClampedArray} arr The array to mark.
-     * @param {number} i The linear coordinate of the pixel to mark
-     * @param {number} fill 0 if black, 255 if white
-     */
-    function mark(arr, i, fill) {
-	arr[i*4] = fill;
-	arr[i*4 + 1] = fill;
-	arr[i*4 + 2] = fill;
-    }
-    
-    /** 
-     * Marks a pixel in data with fillC.
-     * @param {number} i The linear coordinate of the pixel to mark
-     */
-    function markPix(i) {
-	mark(data, i, fillC);
-    }
-
-    
-    /** 
-     * Gets the coordinates of the mouse on the canvas.
-     * 
-     * @param {event} ev The event.
-     * @return {Point} the 2d coordinates of the mouse. 
-     */
-    function mousePos(ev) {
-	var rect = canvas.getBoundingClientRect();
-	return {
-	    x: Math.round((ev.clientX - rect.left)/zoom),
-	    y: Math.round((ev.clientY - rect.top)/zoom)
-	};
-    }
-    
-    /** 
-     * Gets the coordinates of a touch on the canvas.
-     * 
-     * @param {event} ev The event.
-     * @return {Point} The 2d coordinates of the touch. 
-     */
-    function touchPos(ev) {
-	var rect = canvas.getBoundingClientRect();
-	return{
-	    x: Math.round(
-		(ev.targetTouches[0].pageX - rect.left)/zoom),
-	    y: Math.round(
-		(ev.targetTouches[0].pageY - rect.top)/zoom)
-	};
-    }
-    
-    /** 
-     * Gives x y coordinates of a pixel on the canvas given by linear coordiates.
-     * 
-     * @param {number} n The linear coordinate.
-     * @return {Point} The 2d coordinates of the pixels. 
-     */
-    function cartesian(n) {
-	return {
-	    x: n % canvas.width,
-	    y: Math.floor(n/canvas.width)
-	};
-    }
-    
-    /** 
-     * Gives linear coordinate of a pixel on the canvas.
-     * 
-     * @param {number} x x coordinate.
-     * @param {number} y y coordinate.
-     * @return {number} Linear coordinate.
-     */
-    function linear(x, y) {
-	return(canvas.width * y + x);
-    }
-    
-    /** 
-     * Encodes data in url-safe RLE format.
-     * 
-     * @return {string} a string representing the encoded canvas data.
-     */
-    function encodeData() {
-	var encoding = "";
-	var count = 0;
-	var status = "b";
-	for (var z = 0; z < canvas.width*canvas.height; z++)  {
-	    count = 1;
-	    if (data[z*4] == 0) { status = "o"; }
-	    else { status = "b"; }
-	    while (data[z*4] == data[(z+1)*4]) {
-		count++;
-		z ++;
-	    }
-	    if (count == 1) { encoding += status; }
-	    else { encoding += (count + status); }
-	}
-	return encoding;
-    }
-
-    /** 
-     * Generates an S3 url for the current configuration and displays it in the 
-     * link box.
-     */
-    function makeUrl() {
-	const longUrl = ("https://ksadov.github.io/drawlife/?b=" +
-	      birth.join("") + "&s=" + survival.join("") +
-			 "&d=" + encodeData());
-	var xhr = new XMLHttpRequest();
-	xhr.addEventListener("load", reqListener);
-	xhr.open("POST",
-		 "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
-		 true);
-	xhr.setRequestHeader('Content-Type', 'application/json');
-	xhr.overrideMimeType( "application/json; charset=x-user-defined" );
-	xhr.send(JSON.stringify(new String (longUrl)));
-    }
-
-    /** 
-     * Creates a full url after receiving an S3 filename and displays it in the
-     * link box.
-     */
-    function reqListener() {
-	const c = this.responseText;
-	console.log(c);
-	link.value = "http://drawlife.cf.s3-website-us-east-1.amazonaws.com/" +
-	    JSON.parse(c).key;
-    }    
-
-    /** 
-     * Assigns the decoded contents of a url-safe run-length-encoding to data.
-     * 
-     * @param {rle} The RLE to decode.
-     */
-    function decodeRLE(rle) {
-	var count = "";
-	var idx = 0;
-	for (var z = 0; z < rle.length; z++)  {
-	    if (!(isNaN(parseInt(rle[z], 10)))) {
-		count += rle[z];
-	    }
-	    else if (z > 0 && (isNaN(parseInt(rle[z-1], 10))) || (z == 0)) {
-		if (rle[z] == 'o') {
-		    markPix(idx);
-		}
-		idx++;
-	    }
-	    else {
-		if (rle[z] == 'o') {
-		    for (var y = idx; y < idx + parseInt(count); y++) {
-			markPix(y);
-		    }
-		}
-		idx += parseInt(count);
-		count = "";
-	    }
-	}
-	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);	
-    }
-
-    /** 
-     * Assigns values based on the url query parameters, if they exist
-     */
-    function assignUrl() {
-	let params = new URLSearchParams(window.location.search.substring(1));
-	if (params.toString().length > 0) {
-	    let birthV = params.get("b");
-	    birthForm.value = birthV;
-	    birth = parseRule(birthV);
-	    let survivalV = params.get("s");
-	    survivalForm.value = survivalV;
-	    survival = parseRule(survivalV);
-	    let rle = params.get("d");
-	    decodeRLE(rle);
-	}
-    }
 
 // drawing functions
     /** 
@@ -623,6 +447,182 @@ window.addEventListener('load', function(ev) {
     function RLEError(err) {
 	RLEbox.value = err + "\n" + RLEbox.value;
 	throw(err);
+    }
+
+        /** 
+     * Marks a pixel in a specificed Uint8ClampedArray with a specified fill.
+     * 
+     * @param {Uint8ClampedArray} arr The array to mark.
+     * @param {number} i The linear coordinate of the pixel to mark
+     * @param {number} fill 0 if black, 255 if white
+     */
+    function mark(arr, i, fill) {
+	arr[i*4] = fill;
+	arr[i*4 + 1] = fill;
+	arr[i*4 + 2] = fill;
+    }
+    
+    /** 
+     * Marks a pixel in data with fillC.
+     * @param {number} i The linear coordinate of the pixel to mark
+     */
+    function markPix(i) {
+	mark(data, i, fillC);
+    }
+
+    
+    /** 
+     * Gets the coordinates of the mouse on the canvas.
+     * 
+     * @param {event} ev The event.
+     * @return {Point} the 2d coordinates of the mouse. 
+     */
+    function mousePos(ev) {
+	var rect = canvas.getBoundingClientRect();
+	return {
+	    x: Math.round((ev.clientX - rect.left)/zoom),
+	    y: Math.round((ev.clientY - rect.top)/zoom)
+	};
+    }
+    
+    /** 
+     * Gets the coordinates of a touch on the canvas.
+     * 
+     * @param {event} ev The event.
+     * @return {Point} The 2d coordinates of the touch. 
+     */
+    function touchPos(ev) {
+	var rect = canvas.getBoundingClientRect();
+	return{
+	    x: Math.round(
+		(ev.targetTouches[0].pageX - rect.left)/zoom),
+	    y: Math.round(
+		(ev.targetTouches[0].pageY - rect.top)/zoom)
+	};
+    }
+    
+    /** 
+     * Gives x y coordinates of a pixel on the canvas given by linear coordiates.
+     * 
+     * @param {number} n The linear coordinate.
+     * @return {Point} The 2d coordinates of the pixels. 
+     */
+    function cartesian(n) {
+	return {
+	    x: n % canvas.width,
+	    y: Math.floor(n/canvas.width)
+	};
+    }
+    
+    /** 
+     * Gives linear coordinate of a pixel on the canvas.
+     * 
+     * @param {number} x x coordinate.
+     * @param {number} y y coordinate.
+     * @return {number} Linear coordinate.
+     */
+    function linear(x, y) {
+	return(canvas.width * y + x);
+    }
+    
+    /** 
+     * Encodes data in url-safe RLE format.
+     * 
+     * @return {string} a string representing the encoded canvas data.
+     */
+    function encodeData() {
+	var encoding = "";
+	var count = 0;
+	var status = "b";
+	for (var z = 0; z < canvas.width*canvas.height; z++)  {
+	    count = 1;
+	    if (data[z*4] == 0) { status = "o"; }
+	    else { status = "b"; }
+	    while (data[z*4] == data[(z+1)*4]) {
+		count++;
+		z ++;
+	    }
+	    if (count == 1) { encoding += status; }
+	    else { encoding += (count + status); }
+	}
+	return encoding;
+    }
+
+    /** 
+     * Generates an S3 url for the current configuration and displays it in the 
+     * link box.
+     */
+    function makeUrl() {
+	const longUrl = ("https://ksadov.github.io/drawlife/?b=" +
+	      birth.join("") + "&s=" + survival.join("") +
+			 "&d=" + encodeData());
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", reqListener);
+	xhr.open("POST",
+		 "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
+		 true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.overrideMimeType( "application/json; charset=x-user-defined" );
+	xhr.send(JSON.stringify(new String (longUrl)));
+    }
+
+    /** 
+     * Creates a full url after receiving an S3 filename and displays it in the
+     * link box.
+     */
+    function reqListener() {
+	const c = this.responseText;
+	console.log(c);
+	link.value = "http://drawlife.cf.s3-website-us-east-1.amazonaws.com/" +
+	    JSON.parse(c).key;
+    }    
+
+    /** 
+     * Assigns the decoded contents of a url-safe run-length-encoding to data.
+     * 
+     * @param {rle} The RLE to decode.
+     */
+    function decodeRLE(rle) {
+	var count = "";
+	var idx = 0;
+	for (var z = 0; z < rle.length; z++)  {
+	    if (!(isNaN(parseInt(rle[z], 10)))) {
+		count += rle[z];
+	    }
+	    else if (z > 0 && (isNaN(parseInt(rle[z-1], 10))) || (z == 0)) {
+		if (rle[z] == 'o') {
+		    markPix(idx);
+		}
+		idx++;
+	    }
+	    else {
+		if (rle[z] == 'o') {
+		    for (var y = idx; y < idx + parseInt(count); y++) {
+			markPix(y);
+		    }
+		}
+		idx += parseInt(count);
+		count = "";
+	    }
+	}
+	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);	
+    }
+
+    /** 
+     * Assigns values based on the url query parameters, if they exist
+     */
+    function assignUrl() {
+	let params = new URLSearchParams(window.location.search.substring(1));
+	if (params.toString().length > 0) {
+	    let birthV = params.get("b");
+	    birthForm.value = birthV;
+	    birth = parseRule(birthV);
+	    let survivalV = params.get("s");
+	    survivalForm.value = survivalV;
+	    survival = parseRule(survivalV);
+	    let rle = params.get("d");
+	    decodeRLE(rle);
+	}
     }
     
 // callbacks
