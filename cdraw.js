@@ -301,7 +301,10 @@ window.addEventListener('load', function(ev) {
 	    for (var x = 0; x < canvas.width; x++) {
 		if (data[linear(x, y)*4] !==  data[linear(x-1, y)*4] || x == 0) {
 		    if (prevState !== "") {
-			encoding += count + prevState;
+			if (count > 1) {
+			    encoding += count + prevState;
+			}
+			else { encoding += prevState; }
 		    }
 		    count = 1;
 		    if (data[linear(x, y)*4] == 0) { prevState = 'o'; }
@@ -311,7 +314,10 @@ window.addEventListener('load', function(ev) {
 		    count++;
 		}
 	    }
-	    encoding += count + prevState + '$';
+	    if (count > 1) {
+		encoding += count + prevState + '$';
+	    }
+	    else { encoding += prevState + '$' }
 	}
 	return encoding.slice(0, -1) + '!';
     }
