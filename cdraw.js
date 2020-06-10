@@ -559,9 +559,9 @@ window.addEventListener('load', function(ev) {
      * link box.
      */
     function makeUrl() {
-	const longUrl = ("https://ksadov.github.io/drawlife/?b=" +
-	      birth.join("") + "&s=" + survival.join("") +
-			 "&d=" + encodeData());
+	const encoding = ("{\"b\": " +
+	      birth.join("") + ", \"s\":" + survival.join("") +
+			 ", \"d\": \"" + encodeData() + "\"}");
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", reqListener);
 	xhr.open("POST",
@@ -569,7 +569,7 @@ window.addEventListener('load', function(ev) {
 		 true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.overrideMimeType( "application/json; charset=x-user-defined" );
-	xhr.send(JSON.stringify(new String (longUrl)));
+	xhr.send(JSON.stringify(new String (encoding)));
     }
 
     /** 
@@ -578,7 +578,7 @@ window.addEventListener('load', function(ev) {
      */
     function reqListener() {
 	const c = this.responseText;
-	link.value = "http://drawlife.cf.s3-website-us-east-1.amazonaws.com/" +
+	link.value = "https://ksadov.github.io/drawlife/?v=" +
 	    JSON.parse(c).key;
     }    
 
@@ -618,6 +618,18 @@ window.addEventListener('load', function(ev) {
      */
     function assignUrl() {
 	let params = new URLSearchParams(window.location.search.substring(1));
+	if (params.toString().length == 0 ) {
+	    var xhr = new XMLHttpRequest();
+	    xhr.addEventListener("load", contentListener);
+	    xhr.open("POST",
+		     "https://w6reayr37i.execute-api.us-east-1.amazonaws.com/test",
+		     true);
+	    xhr.setRequestHeader('Content-Type', 'application/json');
+	    xhr.overrideMimeType( "application/json; charset=x-user-defined" );
+	    //xhr.send(JSON.stringify(new String (params.get("v"))));
+	    xhr.send(JSON.stringify(new String ("ttrCqyr")));
+	}
+/*	    
 	if (params.toString().length > 0) {
 	    let birthV = params.get("b");
 	    birthForm.value = birthV;
@@ -628,7 +640,21 @@ window.addEventListener('load', function(ev) {
 	    let rle = params.get("d");
 	    decodeRLE(rle);
 	}
+*/
     }
+    
+    function contentListener()
+	const vals = this.responseText;
+	console.log(vals)
+	const birthV = vals.b;
+	birthForm.value = birthV;
+	birth = parseRule(birthV);
+	const survivalV = vals.s;
+	survivalForm.value = survivalV;
+	survival = parseRule(survivalV);
+	const rle = vals.d;
+	decodeRLE(rle);
+    }  
     
 // callbacks
     canvas.addEventListener('mousemove',  function(ev) {
