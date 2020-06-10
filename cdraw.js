@@ -77,10 +77,7 @@ window.addEventListener('load', function(ev) {
     
     /** 
      * Marks a pixel in data with fillC.
-     * 
-     * @param {Uint8ClampedArray} arr The array to mark.
      * @param {number} i The linear coordinate of the pixel to mark
-     * @param {number} fill 0 if black, 255 if white
      */
     function markPix(i) {
 	mark(data, i, fillC);
@@ -88,21 +85,23 @@ window.addEventListener('load', function(ev) {
 
     
     /** 
-     * Get the coordinates of the mouse on the canvas.
+     * Gets the coordinates of the mouse on the canvas.
      * 
-     * @return {Point} The 2d coordinates of the mouse. 
+     * @param {event} ev The event.
+     * @return {Point} the 2d coordinates of the mouse. 
      */
     function mousePos(ev) {
 	var rect = canvas.getBoundingClientRect();
 	return {
-	    x: Math.round((event.clientX - rect.left)/zoom),
-	    y: Math.round((event.clientY - rect.top)/zoom)
+	    x: Math.round((ev.clientX - rect.left)/zoom),
+	    y: Math.round((ev.clientY - rect.top)/zoom)
 	};
     }
     
     /** 
-     * Get the coordinates of the touch on the canvas.
+     * Gets the coordinates of a touch on the canvas.
      * 
+     * @param {event} ev The event.
      * @return {Point} The 2d coordinates of the touch. 
      */
     function touchPos(ev) {
@@ -115,12 +114,12 @@ window.addEventListener('load', function(ev) {
 	};
     }
     
-   /** 
-    * Get x y coordinates of a pixel on the canvas given by linear coordiates.
-    * 
-    * @param {number} The linear coordinate.
-    * @return {Point} The 2d coordinates of the pixels. 
-    */
+    /** 
+     * Gives x y coordinates of a pixel on the canvas given by linear coordiates.
+     * 
+     * @param {number} n The linear coordinate.
+     * @return {Point} The 2d coordinates of the pixels. 
+     */
     function cartesian(n) {
 	return {
 	    x: n % canvas.width,
@@ -128,22 +127,22 @@ window.addEventListener('load', function(ev) {
 	};
     }
     
-   /** 
-    * Get linear coordinate of a pixel on the canvas.
-    * 
-    * @param {number} x x coordinate.
-    * @param {number} y y coordinate.
-    * @return {number} Linear coordinate.
-    */
+    /** 
+     * Gives linear coordinate of a pixel on the canvas.
+     * 
+     * @param {number} x x coordinate.
+     * @param {number} y y coordinate.
+     * @return {number} Linear coordinate.
+     */
     function linear(x, y) {
 	return(canvas.width * y + x);
     }
     
-   /** 
-    * Encode data in url-safe RLE format.
-    * 
-    * @return {string} a string representing the encoded data.
-    */
+    /** 
+     * Encodes data in url-safe RLE format.
+     * 
+     * @return {string} a string representing the encoded canvas data.
+     */
     function encodeData() {
 	var encoding = "";
 	var count = 0;
@@ -163,8 +162,9 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Generate a url and display it in the url box.
-    */
+     * Generates an S3 url for the current configuration and displays it in the 
+     * link box.
+     */
     function makeUrl() {
 	const longUrl = ("https://ksadov.github.io/drawlife/?b=" +
 	      birth.join("") + "&s=" + survival.join("") +
@@ -180,10 +180,9 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Creates a full link after receiving the filename.
-    *
-    * @returns {string} the full link
-    */
+     * Creates a full url after receiving an S3 filename and displays it in the
+     * link box.
+     */
     function reqListener() {
 	const c = this.responseText;
 	console.log(c);
@@ -192,10 +191,10 @@ window.addEventListener('load', function(ev) {
     }    
 
     /** 
-    * Assign the decoded contents of a url-safe run-length-encoding to data.
-    * 
-    * @param {rle} The RLE to decode.
-    */
+     * Assigns the decoded contents of a url-safe run-length-encoding to data.
+     * 
+     * @param {rle} The RLE to decode.
+     */
     function decodeRLE(rle) {
 	var count = "";
 	var idx = 0;
@@ -223,15 +222,10 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Assign values based on the url.
-    */
+     * Assigns values based on the url query parameters, if they exist
+     */
     function assignUrl() {
 	let params = new URLSearchParams(window.location.search.substring(1));
-	/*
-	let url = new URL(
-	    'https://ksadov.github.io/drawlife/?b=1&s=2&d=150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o150b50o151b49o151b49o151b49o151b49o151b49o152b48o152b48o152b48o153b47o153b47o153b47o154b46o154b46o155b45o155b45o156b44o156b44o157b43o157b43o158b42o159b41o159b41o160b40o161b39o162b38o163b37o164b36o164b36o166b34o167b33o168b32o169b31o170b30o172b28o173b27o175b25o177b23o179b21o181b19o184b16o187b13o192b8o19800b');
-	let params = new URLSearchParams(url.search);
-*/
 	if (params.toString().length > 0) {
 	    let birthV = params.get("b");
 	    birthForm.value = birthV;
@@ -245,25 +239,25 @@ window.addEventListener('load', function(ev) {
     }
 
 // drawing functions
-   /** 
-    * Calculate the distance between two points.
-    * 
-    * @param {Point} The first point.
-    * @param {Point} The second point.
-    * @return {number} Distance rounded to the nearest int.
-    */
+    /** 
+     * Calculates the distance between two points.
+     * 
+     * @param {Point} p0 The first point.
+     * @param {Point} p1 The second point.
+     * @return {number} Distance rounded to the nearest int.
+     */
     function distToPoint(p0, p1) {
 	return Math.round(Math.sqrt( (p0.x - p1.x) ** 2 + (p0.y - p1.y) ** 2 ));
     }
 
-   /** 
-    * Calculate the distance between a point and a line given by two points.
-    * 
-    * @param {Point} p0 The point.
-    * @param {Point} p1 The first point on the line.
-    * @param {Point} p2 The second point on the line.
-    * @return {number} Distance rounded to the nearest int.
-    */
+    /** 
+     * Calculate the distance between a point and a line given by two points.
+     * 
+     * @param {Point} p0 The point.
+     * @param {Point} p1 The first point on the line.
+     * @param {Point} p2 The second point on the line.
+     * @return {number} Distance rounded to the nearest int.
+     */
     function distToLine(p0, p1, p2) {
 	var numerator = Math.abs((p2.y - p1.y)*p0.x -
                                       (p2.x - p1.x)*p0.y +
@@ -277,27 +271,27 @@ window.addEventListener('load', function(ev) {
 	}
     }
 
-   /** 
-    * Return the slope of a line given by two points.
-    * 
-    * @param {Point} p1 The first point.
-    * @param {Point} p2 The second point.
-    * @return {number} Slope.
-    */    
+    /** 
+     * Return the slope of a line given by two points.
+     * 
+     * @param {Point} p1 The first point.
+     * @param {Point} p2 The second point.
+     * @return {number} Slope.
+     */    
     function lineCoefficients(p1, p2) {
 	return {
 	    m: (p2.y - p1.y)/(p2.x - p1.x),
 	}
     }
 
-   /** 
-    * Returns true if a point falls within a stroke between two points.
-    * 
-    * @param {Point} p0 The point
-    * @param {Point} p1 An endpoint of the stroke.
-    * @param {Point} p2 An endpoint of the stroke.
-    * @return {number} Distance rounded to the nearest int.
-    */
+    /** 
+     * Returns true if a point falls within a stroke between two points.
+     * 
+     * @param {Point} p0 The point
+     * @param {Point} p1 An endpoint of the stroke.
+     * @param {Point} p2 An endpoint of the stroke.
+     * @return {number} Distance rounded to the nearest int.
+     */
     function inStroke(p0, p1,  p2) {
 	var inRectangle = false;
 	if (p1.y == p2.y) {
@@ -321,9 +315,11 @@ window.addEventListener('load', function(ev) {
 		distToPoint(p0, p2) < radius);
     }
 
-   /** 
-    * Draws a circle on the canvas at a given position..
-    */    
+    /** 
+     * Draws a filled circle on the canvas at a given position.
+     *
+     * @param {Point} the center of the circle
+     */    
     function drawCircle(pos) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
@@ -334,12 +330,12 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
 
-   /** 
-    * Draws a stroke with rounded ends on the canvas between two points.
-    * 
-    * @param {Point} p1 An endpoint of the stroke.
-    * @param {Point} p2 An endpoint of the stroke.
-    */
+    /** 
+     * Draws a stroke with rounded ends on the canvas between two points.
+     * 
+     * @param {Point} p1 An endpoint of the stroke.
+     * @param {Point} p2 An endpoint of the stroke.
+     */
     function drawLine(p1, p2) {
 	for (i = 0; i < canvas.width*canvas.height; i++) {
 	    let icart = cartesian(i);
@@ -350,9 +346,11 @@ window.addEventListener('load', function(ev) {
 	ctx.putImageData(new ImageData(data, canvas.width), 0, 0);
     }
 
-   /** 
-    * Draws on the canvas at a given position.
-    */
+    /** 
+     * Draws on the canvas at a given position.
+     *
+     * @param {Point} pos the position to draw at
+     */
     function draw(pos) {
 	if (mouseDown) {
 	    if (prevPoint == null) {
@@ -365,9 +363,9 @@ window.addEventListener('load', function(ev) {
 	}
     }
 
-   /** 
-    * Clears the canvas.
-    */
+    /** 
+     * Clears the canvas.
+     */
     function clear() {
 	disableConway();
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -377,9 +375,9 @@ window.addEventListener('load', function(ev) {
     }
 
 // cellular automata functions
-   /** 
-    * Turns off cellular automate stepping.
-    */
+    /** 
+     * Turns off cellular automate stepping.
+     */
     function disableConway() {
 	conwayOn = false;
 	conwayB.textContent = "run";
@@ -390,9 +388,9 @@ window.addEventListener('load', function(ev) {
 	DB.disabled = false;
     }
     
-   /** 
-    * Turns on cellular automata stepping.
-    */
+    /** 
+     * Turns on cellular automata stepping.
+     */
     function enableConway() {
 	conwayOn = true;
 	conwayB.textContent = "stop";
@@ -403,9 +401,9 @@ window.addEventListener('load', function(ev) {
 	DB.disabled = true;
     }
     
-   /** 
-    * Advances the cellular automata on the canvas by one step.
-    */
+    /** 
+     * Advances the cellular automata on the canvas by one step.
+     */
     function step() {
 	function nicemod(n, m) {
 	    return ((n % m) + m) % m;
@@ -441,35 +439,34 @@ window.addEventListener('load', function(ev) {
 	updateGeneration(generation + 1);
     }
     
-   /** 
-    * Update text description of generation.
-    *
-    * @param {number} n The new generation.
-    */
+    /** 
+     * Updates text description of generation.
+     *
+     * @param {number} n The new generation.
+     */
     function updateGeneration(n) {
 	generation = n;
 	generationText.textContent = "generation: " + n;
 	
     }
     
-   /** 
-    * Converts a birth or survival rule into a list of digits.
-    *
-    * @param {number} n The unparsed rule.
-    *
-    * @return {number array} The digits.
-    */
+    /** 
+     * Converts a birth or survival rule into a list of digits.
+     *
+     * @param {number} n The rule.
+     *
+     * @return {number array} The list of digits.
+     */
     function parseRule(n) {
 	var digits = n.toString().split('')
 	return (digits.map(Number))
     }
 
     /** 
-    * Encode data in standard RLE format.
-    * 
-    * @return {string} a string representing the encoded data.
-    */
-
+     * Encodes data in standard RLE format.
+     * 
+     * @return {string} a string representing the encoded data.
+     */
     function encodeDataStandard() {
 	var encoding = "";
 	var count = 1;
@@ -496,11 +493,11 @@ window.addEventListener('load', function(ev) {
     }
  
     /** 
-    * Returns the number of cells in a RLE line.
-    *
-    * @param {string} a representation of a line in RLE.
-    * @return {number} the number of cells in a RLE line.
-    */
+     * Returns the number of cells in a RLE line.
+     *
+     * @param {string} l a representation of a line in RLE.
+     * @return {number} the number of cells in a RLE line.
+     */
     function lineLength(l) {
 	var acc = "";
 	var count = 0;
@@ -518,11 +515,11 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Determines whether a stadard RLE line end with a numbers.
-    * 
-    * @return {number} The number at the end of the RLE line, 1 if no number
-    * detected.
-    */
+     * Determines whether a stadard RLE line end with a numbers.
+     * 
+     * @return {number} The number at the end of the RLE line, 1 if no number
+     * detected.
+     */
     function lineEndNumber(line){
 	var count = "";
 	for (var i = line.length - 1; !isNaN(parseInt(line[i])); i--) {
@@ -533,11 +530,12 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Assign the decoded contents of a standard run-length-encoding and
-    * rulestring to data.
-    * 
-    * @param {rle} The standard RLE to decode.
-    */
+     * Assigns the decoded contents of a standard run-length-encoding to data.
+     * 
+     * @param {string} rle The standard RLE to decode.
+     * @param {number} x The width of the encoded image.
+     * @param {number} y The height of the encoded image.
+     */
     function decodeDataStandard(rle, x, y) {
 	clear();
 	if (rle[rle.length - 1] == "!") {
@@ -570,15 +568,12 @@ window.addEventListener('load', function(ev) {
 	}
 	decodeRLE(yOffset + 'b' + urlSafe);
     }
-
 	
     /** 
-    * Converts the current configuration to a standard RLE.
-    *
-    *
-    * @return {string} The RLE.
-    */
-
+     * Converts the current configuration to a standard RLE including rulestring.
+     *
+     * @return {string} The RLE.
+     */
     function encode() {
 	annotated = encodeDataStandard();
 	return (
@@ -590,13 +585,14 @@ window.addEventListener('load', function(ev) {
     }
 
     /** 
-    * Returns the width, height and RLE encoding of the argument.
-    *
-    * @param: {string} i input to RLEBox
-    * 
-    * @return {x: number, y: number, rle: string} The width, height, and RLE
-    * encoding of the input.
-    */
+     * Returns parsed input to the RLEbox.
+     *
+     * @param: {string} i input
+     * 
+     * @return {x: number, y: number, b: number array, s: number array 
+     * rle: string} The width, height, survival rule, birth rule and RLE 
+     * encoding of the input.
+     */
     function parseInput(i) {
 	i = i.replace(/ /gm, "");
 	x = i.match(/x=([0-9]+)/);
@@ -628,6 +624,7 @@ window.addEventListener('load', function(ev) {
 	RLEbox.value = err + "\n" + RLEbox.value;
 	throw(err);
     }
+    
 // callbacks
     canvas.addEventListener('mousemove',  function(ev) {
 	draw(mousePos(ev));
