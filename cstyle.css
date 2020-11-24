@@ -9,6 +9,10 @@ canvas {
   padding: 0px;
 }
 
+#loading
+{
+    color: red;
+}
 /* disable number pon on firefox */
 
 input[class='rule'] {
@@ -29,7 +33,6 @@ input[class=rule]::-webkit-outer-spin-button {
     flex-direction: column;
     padding: 5px;
     align-content: flex-start;
-    padding: 3px;
 }
 
 #controls>* {
@@ -190,7 +193,8 @@ and (orientation : landscape) {
 	top: 0;
 	left: 0;
 	overflow-x: hidden;
-	padding: 20px;
+	padding-left: 20px;
+	padding-top: 5px;
     }
 
     textarea {

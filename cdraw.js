@@ -28,6 +28,8 @@ window.addEventListener('load', function(ev) {
     var textureB7 = document.getElementById('texture7');
     var textureB8 = document.getElementById('texture8');
 
+    var loadingtext = document.getElementById('loading');
+
     var urlB =  document.getElementById('urlButton');
     var link =  document.getElementById('link');
 
@@ -617,8 +619,9 @@ window.addEventListener('load', function(ev) {
      * Assigns values based on the url query parameters, if they exist
      */
     function assignUrl() {
-	let params = new URLSearchParams(window.location.search.substring(1));
-	if (params.toString().length > 0 ) {
+	let params = new URLSearchParams(window.location.search.substring(1));	
+	if (params.toString().length > 0 & params.has("v")) {
+	    loadingtext.style.visibility = "visible"; 
 	    var xhr = new XMLHttpRequest();
 	    xhr.addEventListener("load", decodeListener);
 	    xhr.open("POST",
@@ -628,12 +631,16 @@ window.addEventListener('load', function(ev) {
 	    xhr.overrideMimeType( "application/json; charset=x-user-defined" );
 	    xhr.send(JSON.stringify(new String (params.get("v"))));
 	}
+	else {
+	    loadingtext.style.visibility = "hidden";
+	}
     }
     
     /** 
      * Assigns data and rules based on url parameters.
      */
     function decodeListener() {
+	loadingtext.style.visibility = "hidden";
 	const vals = JSON.parse(this.responseText);
 	const birthV = vals.b;
 	birthForm.value = birthV;
